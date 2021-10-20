@@ -71,6 +71,8 @@ class AppConstants:
 
     GENDER_DICTIONARY = {"F": "Female", "M": "Male", "O": "Other"}
 
+    INPUT_DELIMITER = "$"
+
     def get_main_screen_prompt(self):
         """ Message to be displayed after the user logs in. Its the main screen
         message, which would list the operations that can be performed with this

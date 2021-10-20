@@ -4,6 +4,8 @@ Class: CS 521 - Fall 1
 Date: 10/16/2021
 Homework Problem # Project
 Description of Problem (1-2 sentence summary in your own words):
+
+This program handles the patient look up flow.
 """
 import copy
 
@@ -20,38 +22,50 @@ class LookUpFlowHandler:
     and delete the patient.
     """
 
+    # Prompt message to be displayed to the user during look up
     __UPDATE_DEMOGRAPHIC_MESSAGE = "Please enter FirstName, LastName,Date of " \
                                    "Birth and Gender of the patient you want " \
                                    "to search, separated by '$'\nFor Gender " \
                                    "please enter M for Male, F for Female " \
                                    "and O for Other."
 
+    # Error Message invalid entries with provided delimiter.
     __ERROR_MESSAGE_INVALID_PRIMARY_ENTRIES = "Error! Please enter valid " \
                                               "entries separated by '$'"
 
+    # Gender validation Failed, invalid Gender entry.
     __ERROR_MESSAGE_INVALID_GENDER_ENTRY = "Error! Please enter a " \
                                            "valid gender value. Try again!"
 
+    # Error message when patient does not exists in he CSV file.
     __ERROR_MESSAGE_CANNOT_FIND_PATIENT = "Unable to find patient {},{} {},{}"
 
+    # Message to be displayed when we find patient for the provided patient id.
     __SUCCESS_MESSAGE_FOUND_PATIENT = "Success! Found Patient and here " \
                                       "are the details=====\n{}\n"
 
+    # Message to be displayed when the patient was deleted successfully.
     __SUCCESS_PATIENT_DELETE = "Patient {},{} has been " \
                                "deleted successfully from the system"
 
+    # Error message displayed when there was error occurred while deleting the
+    # patient
     __ERROR_FAILED_TO_DELETE_PATIENT = "Failed to delete the patient {},{}."
 
     def lookup_patient_flow(self):
         """ Initiate the patient look up for operations like update or delete
         patient details.
         """
-        print("-"*20)
+        print("-" * 20)
         print("Main -> Patient Look Up\n")
         searched_patient = None
-        while True:
+        while True:  # Keep prompting user for patient look up entries.
+            # Display input message
             name_dob = input(self.__UPDATE_DEMOGRAPHIC_MESSAGE)
-            name_dob_input_list = name_dob.split("$")
+
+            # Convert input string to list of string entries splitted by
+            # default whitespace.
+            name_dob_input_list = name_dob.split(AppConstants.INPUT_DELIMITER)
             if len(name_dob_input_list) != 4:
                 print(self.__ERROR_MESSAGE_INVALID_PRIMARY_ENTRIES)
             else:
@@ -136,10 +150,10 @@ class LookUpFlowHandler:
         :param patient: Patient id for which records needs to be deleted.
         """
         if FileHandlerUtility().delete_a_record(
-                patient.get_patient_id()) is True:
+                patient.get_patient_id()) is True:  # Delete Success!
             print(self.__SUCCESS_PATIENT_DELETE.format(
                 patient.get_first_name(), patient.get_last_name()))
-        else:
+        else:  # Delete Failed!
             print(self.__ERROR_FAILED_TO_DELETE_PATIENT.format(
                 patient.get_first_name(), patient.get_last_name()))
 
@@ -151,4 +165,12 @@ class LookUpFlowHandler:
         :param patient: Patient id for which record needs to be deleted.
         """
         copy_of_patient = copy.copy(patient)
-        AddUpdateFlowHandler(copy_of_patient).startAddNewPatientFlow()
+        AddUpdateFlowHandler(copy_of_patient).add_update_patient_flow()
+
+
+# Unit Tests
+if __name__ == "__main__":
+    # There are no test case for the current file as methods don't return a
+    # specific value, the operations are mainly performed on FileHandlerUtility
+    # and which has required test cases.
+    pass

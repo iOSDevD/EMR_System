@@ -9,7 +9,7 @@ Pending
 
 import sys
 
-from InputFiles.LoginUserValidation import perform_crendetial_validation
+from InputFiles.LoginUserValidation import perform_credential_validation
 from utilities.AppConstants import AppConstants, LoginConstants
 from handlers.AddUpdatePatient import AddUpdateFlowHandler
 
@@ -24,7 +24,7 @@ print(LoginConstants.WELCOME_MESSAGE)
 while True:
     input_str = input(LoginConstants.EMR_LOGIN_CREDENTIAL_PROMPT_MESSAGE)
 
-    is_user_valid, validation_message = perform_crendetial_validation(input_str)
+    is_user_valid, validation_message = perform_credential_validation(input_str)
     print(validation_message)
     if is_user_valid:
         break
@@ -35,9 +35,9 @@ while True:
 
     if selected_main_option_str in AppConstants.OPTIONS.keys():
         if selected_main_option_str == AppConstants.MAIN_SCREEN_PRINT_KEY:
-            PrintFlowHandler().printAllRecored()
+            PrintFlowHandler().print_all_records()
         elif selected_main_option_str == AppConstants.MAIN_SCREEN_ADD_NEW_PATIENT_KEY:
-            AddUpdateFlowHandler().startAddNewPatientFlow()
+            AddUpdateFlowHandler().add_update_patient_flow()
         elif selected_main_option_str == AppConstants.MAIN_SCREEN_SEARCH_PATIENT_KEY:
             LookUpFlowHandler().lookup_patient_flow()
         elif selected_main_option_str == AppConstants.MAIN_SCREEN_SIGN_OFF_KEY:
