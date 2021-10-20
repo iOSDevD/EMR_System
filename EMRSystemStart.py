@@ -30,17 +30,17 @@ while True:
         break
 
 while True:
-    display_main_option_str = AppConstants().getMainScreenOptionsMessge()  # Not static need to make it static
+    display_main_option_str = AppConstants().get_main_screen_prompt()  # Not static need to make it static
     selected_main_option_str = input(display_main_option_str)
 
     if selected_main_option_str in AppConstants.OPTIONS.keys():
-        if selected_main_option_str == AppConstants.OPTION_KEY_PRINT_RECORDS:
+        if selected_main_option_str == AppConstants.MAIN_SCREEN_PRINT_KEY:
             PrintFlowHandler().printAllRecored()
-        elif selected_main_option_str == AppConstants.OPTION_KEY_ADD_NEW_PATIENT:
+        elif selected_main_option_str == AppConstants.MAIN_SCREEN_ADD_NEW_PATIENT_KEY:
             AddUpdateFlowHandler().startAddNewPatientFlow()
-        elif selected_main_option_str == AppConstants.OPTION_KEY_SEARCH_PATIENT:
+        elif selected_main_option_str == AppConstants.MAIN_SCREEN_SEARCH_PATIENT_KEY:
             LookUpFlowHandler().lookup_patient_flow()
-        elif selected_main_option_str == AppConstants.OPTION_KEY_SIGN_OFF:
+        elif selected_main_option_str == AppConstants.MAIN_SCREEN_SIGN_OFF_KEY:
             print("\n\nSigning Off, from the System!....................")
             sys.exit()
 

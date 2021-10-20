@@ -75,17 +75,17 @@ class LookUpFlowHandler:
 
         while True:
             lookup_options_str = input(
-                AppConstants().getPatientLookUpScreenOptionsMessge())
+                AppConstants().get_patient_look_up_prompt())
 
             if lookup_options_str in AppConstants.LOOKUP_OPTIONS.keys():
                 if lookup_options_str == \
-                        AppConstants.OPTION_KEY_UPDATE_QUESTIONNAIRE:
+                        AppConstants.PATIENT_LOOK_UP_UPDATE_QUESTIONNAIRE_KEY:
                     self.__start_questionnaire_flow(searched_patient)
                 elif lookup_options_str == \
-                        AppConstants.OPTION_KEY_UPDATE_PATIENT:
+                        AppConstants.PATIENT_LOOK_UP_UPDATE_PATIENT_KEY:
                     self.__update_patient_details(searched_patient)
                 elif lookup_options_str == \
-                        AppConstants.OPTION_KEY_DELETE_PATIENT:
+                        AppConstants.PATIENT_LOOK_UP_DELETE_PATIENT_KEY:
                     self.__delete_patient(searched_patient)
             else:
                 print("*********Closing Patient Look up*************")

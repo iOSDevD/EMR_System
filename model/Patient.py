@@ -16,7 +16,7 @@ class Patient:
     can be obtained from a CSV. For new patient it is created with
     default list"""
 
-    def __init__(self, details_list=AppConstants().getEmptyDataTemplate()):
+    def __init__(self, details_list=AppConstants().get_empty_data_template()):
         (self.__patient_id, self.__first_name, self.__last_name, self.__dob,
          self.__gender, self.__address_line_1, self.__address_line_2,
          self.__city, self.__state, self.__zip,
