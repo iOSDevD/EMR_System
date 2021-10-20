@@ -58,15 +58,6 @@ class PatientValidator:
             if len(patient_list) == 1:
                 return patient_list[0]
 
-    def check_if_patient_exits(self, firstname, lastname, dob,
-                               gender):
-        patient_list = self.__get_records_matching(firstname, lastname, dob,
-                                                   gender)
-        if len(patient_list) > 0:
-            return True
-        else:
-            return False
-
     def validate_gender(self, gender_abbreviation):
         """ Validate gender abbreviation is correct or not
         'm' should return Male
@@ -123,6 +114,7 @@ class PatientValidator:
 
         return True, result_date_str
 
+
 # Unit Tests
 if __name__ == "__main__":
     print("Started Executing test case in PatientValidator")
@@ -142,7 +134,7 @@ if __name__ == "__main__":
                                                     "01/01/1980", "Male")
     assert searched_patient is not None and \
            len(searched_patient.get_patient_id()) > 0, (
-        "Object should not be none and patient id should exists.")
+            "Object should not be none and patient id should exists.")
 
     # 2. Test case to get gender value from its abbreviation.
     assert validator.validate_gender("f") == "Female", \

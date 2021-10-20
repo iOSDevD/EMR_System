@@ -92,6 +92,8 @@ class AppConstants:
 
 # Unit Tests
 if __name__ == "__main__":
+    print("Started Executing test case in AppConstants")
+
     # 1. Test main screen message
     main_screen_message = "a.Add a new Patient\nb.Search Patient\n" \
                           "c.Print all Patient Records\nd.Sign off"
@@ -118,3 +120,5 @@ if __name__ == "__main__":
         "Patient look up prompt does "
         "not match with expected main "
         "screen message '{}'".format(patient_look_up_message))
+
+    print("Success! Completed Executing test case in AppConstants")

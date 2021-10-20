@@ -201,8 +201,8 @@ class Patient:
             self.get_first_name()))
 
         pretty_print_data_list.append("Address:\n{},{},\n{},{}-{}".format(
-            self.get_first_name(),
-            self.get_last_name(),
+            self.get_address_line_1(),
+            self.get_address_line_2(),
             self.get_address_city(),
             self.get_address_state(),
             self.get_address_zip()))
@@ -214,3 +214,27 @@ class Patient:
 
         return "\n".join(pretty_print_data_list)
 
+
+# Unit Tests
+if __name__ == "__main__":
+    print("Started Executing test case in Patient")
+    patient_content_as_list = ["99", "Harry", "Smith", "10/09/1999", "Male",
+                               "1 Home Drive", "Apt 2", "Boston", "MA", "02115",
+                               "100-1000-2200", "harry@bu.edu", "[1,0,0,1]"]
+
+    patient = Patient(patient_content_as_list)
+    assert patient.get_patient_id() == "99" and \
+           patient.get_first_name() == "Harry" and \
+           patient.get_last_name() == "Smith" and \
+           patient.get_dob() == "10/09/1999" and \
+           patient.get_gender() == "Male" and \
+           patient.get_address_line_1() == "1 Home Drive" and \
+           patient.get_address_line_2() == "Apt 2" and \
+           patient.get_address_city() == "Boston" and \
+           patient.get_phone() == "100-1000-2200" and \
+           patient.get_email() == "harry@bu.edu" and \
+           patient.get_questionnaire_as_list() == [1, 0, 0, 1], (
+        "Patient object created from the content as list should "
+        "match with the content in the list.")
+
+    print("Success! Completed Executing test case in Patient")

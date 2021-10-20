@@ -27,6 +27,8 @@ class Question:
 
 # Unit Test for Question object
 if __name__ == "__main__":
+    print("Started Executing test case in Question")
+
     # Question object under test
     question = Question("Question1", ["Yes", "No"])
 
@@ -36,3 +38,5 @@ if __name__ == "__main__":
     # Test case should work fine.
     assert str(question) == expected_question, (
         "String representation should match expected result")
+
+    print("Success! Completed Executing test case in Question")

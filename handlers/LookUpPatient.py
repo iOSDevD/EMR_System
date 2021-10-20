@@ -52,6 +52,10 @@ class LookUpFlowHandler:
     # patient
     __ERROR_FAILED_TO_DELETE_PATIENT = "Failed to delete the patient {},{}."
 
+    # Count pertaining First name, last name , date of birth and Gender as the
+    # basic demographic entries expected from input function during search.
+    BASIC_DEMOGRAPHIC_ENTRIES = 4
+
     def lookup_patient_flow(self):
         """ Initiate the patient look up for operations like update or delete
         patient details.
@@ -63,45 +67,62 @@ class LookUpFlowHandler:
             # Display input message
             name_dob = input(self.__UPDATE_DEMOGRAPHIC_MESSAGE)
 
-            # Convert input string to list of string entries splitted by
+            # Convert input string to list of string entries split by
             # default whitespace.
             name_dob_input_list = name_dob.split(AppConstants.INPUT_DELIMITER)
-            if len(name_dob_input_list) != 4:
+            if len(name_dob_input_list) != \
+                    LookUpFlowHandler.BASIC_DEMOGRAPHIC_ENTRIES:
                 print(self.__ERROR_MESSAGE_INVALID_PRIMARY_ENTRIES)
             else:
+                # Multiple assignment from list to variables.
                 firstname, lastname, dob, gender = name_dob_input_list
+                # Find patient matching name, dob and gender using validator.
                 patient_validator = PatientValidator()
+
+                # Validate gender abbreviation string and in return get
+                # formatted values, ex: "F" converts to Female.
                 gender = patient_validator.validate_gender(gender)
-                if gender is None:
+
+                if gender is None:  # Gender input string error
                     print(self.__ERROR_MESSAGE_INVALID_GENDER_ENTRY)
                 else:
+                    # Input good search for patient. If invalid characters are
+                    # entered it would not find the result.
                     patient = patient_validator.search_for_patient(firstname,
                                                                    lastname,
                                                                    dob, gender)
-                    if patient is None:
+                    if patient is None:  # Patient not found.
                         print(self.__ERROR_MESSAGE_CANNOT_FIND_PATIENT.format(
                             firstname, lastname, dob, gender))
-                    else:
+                    else:  # Found patient.
+                        # Store searched patient to be used further,
+                        # ex: Update patient questionnaire.
                         searched_patient = patient
                         print(self.__SUCCESS_MESSAGE_FOUND_PATIENT.
                               format(patient))
                         break
 
-        while True:
+        while True:  # Prompt actions to take after patient is found.
+
+            # Prompt input for options like update patient details,
+            # questionnaire and delete a patient.
             lookup_options_str = input(
                 AppConstants().get_patient_look_up_prompt())
 
             if lookup_options_str in AppConstants.LOOKUP_OPTIONS.keys():
                 if lookup_options_str == \
                         AppConstants.PATIENT_LOOK_UP_UPDATE_QUESTIONNAIRE_KEY:
+                    # Update questionnaire flow.
                     self.__start_questionnaire_flow(searched_patient)
                 elif lookup_options_str == \
                         AppConstants.PATIENT_LOOK_UP_UPDATE_PATIENT_KEY:
+                    # Update patient demographic detail flow.
                     self.__update_patient_details(searched_patient)
                 elif lookup_options_str == \
                         AppConstants.PATIENT_LOOK_UP_DELETE_PATIENT_KEY:
+                    # Delete a patient flow.
                     self.__delete_patient(searched_patient)
-            else:
+            else: # Any other input text, simply exit the LookUpPatient flow.
                 print("*********Closing Patient Look up*************")
                 break
 
@@ -110,22 +131,30 @@ class LookUpFlowHandler:
         :param patient: Patient object for which we need to update
                         questionnaire.
         """
-        answers = []
+        answers = []  # Default empty list of answers
+
+        # current list of questions
         questionnaire_list = Questionnaire.questionnaire_list
-        current_index = 0
-        while current_index < len(questionnaire_list):
+
+        current_index = 0  # Start from question at index 0
+
+        while current_index < len(questionnaire_list):  # Continue till last one
+            # Display the current question on the console
             prompt_message = Questionnaire().get_question_str_for_prompt(
                 questionnaire_list[current_index])
-            answer_input = input(prompt_message)
-            if answer_input.upper() in Questionnaire.YES_ANSWER_SET:
-                answers.append(1)
-            elif answer_input.upper() in Questionnaire.NO_ANSWER_SET:
-                answers.append(0)
-            else:
-                answers.append(-1)
-            current_index += 1
 
-        self.__update_questionnaire(patient, answers)
+            # Get the Answer for question, yes or no or skipped.
+            answer_input = input(prompt_message)
+
+            if answer_input.upper() in Questionnaire.YES_ANSWER_SET:
+                answers.append(1)  # Store 1 for Yes
+            elif answer_input.upper() in Questionnaire.NO_ANSWER_SET:
+                answers.append(0)  # Store 0 for No
+            else:
+                answers.append(-1)  # Store -1 for skipped by hitting enter.
+            current_index += 1  # Move to next question.
+
+        self.__update_questionnaire(patient, answers)   # Save questions to CSV
 
     def __update_questionnaire(self, patient, answers):
         """ Update the questionnaire for provided patient with the list of
@@ -137,9 +166,13 @@ class LookUpFlowHandler:
         :param answers: List of answers containing values like 1 for Yes,
                         0 for No and -1 for None.
         """
+        # Format the answers from list to string like "[1,0,0,-1]"
         formatted_answers_str = Questionnaire(). \
             get_formatted_answers_to_save(answers)
+        # Update patient object with answers string
         patient.set_questionnaire(formatted_answers_str)
+
+        # Update the patient record for questionnaire.
         FileHandlerUtility().update_a_record(
             patient.get_list_template_to_save(),
             patient.get_patient_id())
@@ -164,7 +197,10 @@ class LookUpFlowHandler:
 
         :param patient: Patient id for which record needs to be deleted.
         """
+        # Create a copy of searched patient
         copy_of_patient = copy.copy(patient)
+        # Initiate the update demographic class, calling a common class
+        # which handles add or update.
         AddUpdateFlowHandler(copy_of_patient).add_update_patient_flow()
 
 
