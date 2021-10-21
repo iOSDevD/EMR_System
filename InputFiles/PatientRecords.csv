@@ -1,4 +1,4 @@
 ﻿Patient Id,First Name,Last Name,Date of Birth,Gender,Address 1,Address 2,City,State,Zip,Phone,email,Questionnaire
-1,Edward,Jones,01/01/1980,Male,2 Rose Drive,Apt 1,Cambridge,MA,2114,111-222-333,a@bu.com,"[0,-1,1,1]"
+1,Edward,Jones,01/01/1980,Male,2 Rose Drive,Apt 1,Cambridge,MA,21146,111-222-3333,edwardjones@bu.edu,"[0,-1,1,1]"
 20,Tom,Riddle,03/04/1991,Male,123 Main Street,Apt 9,Agoura Hills,CA,91301,,tom_riddle@bu.com,
 34,Lia,Johson,10/01/2001,Female,1 Carrie Drive Carrie Drive Carrie Drive Carrie Drive,Apt 20,Marlboro,NJ,7746,888-999-666,lia@bu.com,

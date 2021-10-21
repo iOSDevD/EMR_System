@@ -83,8 +83,15 @@ class AddUpdateFlowHandler:
         """Start the create patient or update patient details mode. For
         a input patient object which is created using a non empty patient id
         it starts the update patient details mode.
-        In case of update patient mode, name_dob_validation is skipped and
-        flow directly  jumps to address and contact details validation."""
+        For update patient mode, name,dob and gender validation is skipped as
+        the patient is already identified and
+        flow directly  jumps to address and contact details validation.
+        Also in update patient mode, it returns a patient object and does not
+        save the object. It is upto the receiver to identify the change and
+        save it.
+
+        For new patient, the patient details are saved to the file.
+        """
         name_dob_validation = False  # Name and dob validation status
         address_validation = False  # Address validation status
         contact_validation = False  # Contact validation status
@@ -97,16 +104,13 @@ class AddUpdateFlowHandler:
             elif contact_validation is False:
                 contact_validation = self.__handle_contact_entries()
 
-            if (name_dob_validation or self.__is_in_new_patient_mode is False) \
+            if (name_dob_validation or self.__is_in_new_patient_mode() is False) \
                     and address_validation and contact_validation:
                 # Validation passed so save the data.
                 csv = FileHandlerUtility()
 
-                if self.__is_in_new_patient_mode is False:
-                    patient_details_list = \
-                        self.__patient.get_list_template_to_save()
-                    csv.update_a_record(patient_details_list,
-                                        self.__patient.get_patient_id())
+                if self.__is_in_new_patient_mode() is False:
+                    return self.__patient
                 else:
                     new_patient_id = len(csv.read_all_records_row_data())
                     self.__patient.set_patient_id(str(new_patient_id))

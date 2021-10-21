@@ -8,6 +8,8 @@ Description of Problem (1-2 sentence summary in your own words):
 Patient object which represents columns in the CSV. For example `Patient Id`
 is re-presented by attribute `self.__patient_id`.
 """
+import copy
+
 from utilities.AppConstants import AppConstants
 
 
@@ -76,6 +78,11 @@ class Patient:
         """Get the contact phone number of the patient.
         CSV column: Phone"""
         return self.__phone
+
+    def get__questionnaire(self):
+        """Get the questionnaire string which is saved in CSV column. For
+        list representation use get_questionnaire_as_list()."""
+        return self.__questionnaire
 
     def get_email(self):
         """Get the email-id of the patient.
@@ -214,14 +221,32 @@ class Patient:
 
         return "\n".join(pretty_print_data_list)
 
+    def __eq__(self, other):
+        return self.__patient_id == other.get_patient_id() and \
+               self.__first_name == other.get_first_name() and \
+               self.__last_name == other.get_last_name() and \
+               self.__dob == other.get_dob() and \
+               self.__gender == other.get_gender() and \
+               self.__address_line_1 == other.get_address_line_1() and \
+               self.__address_line_2 == other.get_address_line_2() and \
+               self.__city == other.get_address_city() and \
+               self.__state == other.get_address_state() and \
+               self.__zip == other.get_address_zip() and \
+               self.__phone == other.get_phone() and \
+               self.__email == other.get_email() and \
+               self.__questionnaire == other.get__questionnaire()
+
 
 # Unit Tests
 if __name__ == "__main__":
     print("Started Executing test case in Patient")
+
+    # Patient content in list, use to create patient object.
     patient_content_as_list = ["99", "Harry", "Smith", "10/09/1999", "Male",
                                "1 Home Drive", "Apt 2", "Boston", "MA", "02115",
                                "100-1000-2200", "harry@bu.edu", "[1,0,0,1]"]
 
+    # 1. Test patient object created fromt the list is correct or not.
     patient = Patient(patient_content_as_list)
     assert patient.get_patient_id() == "99" and \
            patient.get_first_name() == "Harry" and \
@@ -236,5 +261,16 @@ if __name__ == "__main__":
            patient.get_questionnaire_as_list() == [1, 0, 0, 1], (
         "Patient object created from the content as list should "
         "match with the content in the list.")
+
+    # 2. Test copy of patient should match, with "==" i.e check
+    # magic method __eq__() is working fine.
+    new_patient = copy.copy(patient)
+    assert new_patient == patient, (
+        "Copy of new patient created should match as there is no change")
+
+    # 3. Test after update the patient object should not match.
+    new_patient.set_address_line_1("Test Address change")
+    assert new_patient != patient, (
+        "After update patient object should not, values are different.")
 
     print("Success! Completed Executing test case in Patient")

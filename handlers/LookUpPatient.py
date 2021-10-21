@@ -52,6 +52,20 @@ class LookUpFlowHandler:
     # patient
     __ERROR_FAILED_TO_DELETE_PATIENT = "Failed to delete the patient {},{}."
 
+    # Error message displayed when there was error occurred while updating the
+    # patient demographic details
+    __ERROR_FAILED_TO_UPDATE_DEMOGRAPHICS = "Error! Failed to update patient" \
+                                            " demographics! Please try again."
+
+    # Message to be displayed when user updates the demographics but details
+    # are same as before the update.
+    __PATIENT_DATA_UP_TO_DATE = "Patient details entered are same, hence " \
+                                "nothing to update. We already have the " \
+                                "updated entries for the patient {},{}."
+
+    # Message to be displayed when update of the patient details was success.
+    __SUCCESS_PATIENT_UPDATE = "Patient Data updated successfully for {},{}"
+
     # Count pertaining First name, last name , date of birth and Gender as the
     # basic demographic entries expected from input function during search.
     BASIC_DEMOGRAPHIC_ENTRIES = 4
@@ -122,7 +136,7 @@ class LookUpFlowHandler:
                         AppConstants.PATIENT_LOOK_UP_DELETE_PATIENT_KEY:
                     # Delete a patient flow.
                     self.__delete_patient(searched_patient)
-            else: # Any other input text, simply exit the LookUpPatient flow.
+            else:  # Any other input text, simply exit the LookUpPatient flow.
                 print("*********Closing Patient Look up*************")
                 break
 
@@ -154,7 +168,7 @@ class LookUpFlowHandler:
                 answers.append(-1)  # Store -1 for skipped by hitting enter.
             current_index += 1  # Move to next question.
 
-        self.__update_questionnaire(patient, answers)   # Save questions to CSV
+        self.__update_questionnaire(patient, answers)  # Save questions to CSV
 
     def __update_questionnaire(self, patient, answers):
         """ Update the questionnaire for provided patient with the list of
@@ -201,7 +215,25 @@ class LookUpFlowHandler:
         copy_of_patient = copy.copy(patient)
         # Initiate the update demographic class, calling a common class
         # which handles add or update.
-        AddUpdateFlowHandler(copy_of_patient).add_update_patient_flow()
+
+        updated_patient = AddUpdateFlowHandler(copy_of_patient). \
+            add_update_patient_flow()
+        if updated_patient is not None:  # Returned patient object is not None
+            # Check if there is any difference between the object being saved
+            # and the current patient object
+            if updated_patient != patient:  # Found difference, so save
+                csv = FileHandlerUtility()
+                patient_details_list = updated_patient. \
+                    get_list_template_to_save()
+                csv.update_a_record(patient_details_list,
+                                    updated_patient.get_patient_id())
+                print(LookUpFlowHandler.__SUCCESS_PATIENT_UPDATE.format(
+                    patient.get_first_name(), patient.get_last_name()))
+            else:  # No difference, nothing to save.
+                print(LookUpFlowHandler.__PATIENT_DATA_UP_TO_DATE.format(
+                    patient.get_first_name(), patient.get_last_name()))
+        else:
+            print(LookUpFlowHandler.__ERROR_FAILED_TO_UPDATE_DEMOGRAPHICS)
 
 
 # Unit Tests
