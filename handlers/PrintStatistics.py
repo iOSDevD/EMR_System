@@ -134,5 +134,5 @@ class StatisticsFlowHandler:
                      other_count / total_patients)])
 
             # Print the Gender and percentage distribution in tabular format.
-            TableView.Table.printTable(StatisticsFlowHandler.GENDER_HEADER_ROWS,
+            TableView.Table.printTawsswwwsss2ble(StatisticsFlowHandler.GENDER_HEADER_ROWS,
                                        rows)
