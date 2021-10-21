@@ -23,11 +23,18 @@ class Questionnaire:
     __question_4 = Question("Do you have migraine or had earlier?",
                             ["Yes", "No"])
 
-    questionnaire_list = [__question_1, __question_2, __question_3,
-                          __question_4]
+    # questionnaire_list = [__question_1, __question_2, __question_3,
+    #                       __question_4]
 
     YES_ANSWER_SET = {"Y", "YES"}
     NO_ANSWER_SET = {"N", "NO"}
+
+    def __init__(self):
+        # Public attribute questionnaire list
+        self.questionnaire_list = [Questionnaire.__question_1,
+                                   Questionnaire.__question_2,
+                                   Questionnaire.__question_3,
+                                   Questionnaire.__question_4]
 
     def get_questionnaire_to_print(self, answers):
         """ Generates a string which represents the list of questions along

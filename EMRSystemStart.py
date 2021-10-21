@@ -14,6 +14,7 @@ to be performed like patient look up, update demographics and questionnaire.
 import sys
 
 from InputFiles.LoginUserValidation import perform_credential_validation
+from handlers import PrintStatistics
 from utilities.AppConstants import AppConstants, LoginConstants
 from handlers.AddUpdatePatient import AddUpdateFlowHandler
 
@@ -58,6 +59,9 @@ while True:
                 AppConstants.MAIN_SCREEN_SEARCH_PATIENT_KEY:
             # user selects to search for patient and perform operation
             LookUpFlowHandler().lookup_patient_flow()
+        elif selected_main_option_str == \
+                AppConstants.MAIN_SCREEN_STATISTICS_KEY:
+            PrintStatistics.StatisticsFlowHandler().start_print_statisitics()
         elif selected_main_option_str == AppConstants.MAIN_SCREEN_SIGN_OFF_KEY:
             # user selects to sign off from the system
             print("\n\nSigning Off, from the System!....................")

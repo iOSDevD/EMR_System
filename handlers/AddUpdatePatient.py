@@ -77,7 +77,7 @@ class AddUpdateFlowHandler:
         the current class in update patient details mode, else it defaults
         to new patient creation."""
         self.__patient = patient  # private patient attribute
-        self.__validator = PatientValidator()  # private validator attribute
+        self.validator = PatientValidator()  # public validator attribute
 
     def add_update_patient_flow(self):
         """Start the create patient or update patient details mode. For
@@ -146,7 +146,7 @@ class AddUpdateFlowHandler:
         name_dob = input(AddUpdateFlowHandler.NAME_GENDER_INPUT_MESSAGE)
 
         # Perform input string validation for invalid characters
-        text_has_valid_chars = self.__validator.has_valid_character(name_dob)
+        text_has_valid_chars = self.validator.has_valid_character(name_dob)
         if text_has_valid_chars[0] is False:  # In-valid input characters.
             # Error! Print invalid character message.s
             print(text_has_valid_chars[1])
@@ -162,16 +162,16 @@ class AddUpdateFlowHandler:
                 first_name_str, last_name_str, dob_str, gender_abbreviation_str\
                     = name_dob_input_list
 
-                gender_str = self.__validator.validate_gender(
+                gender_str = self.validator.validate_gender(
                     gender_abbreviation_str)  # Validate gender abbreviation.
 
-                dob_validation = self.__validator.has_validate_date_format(
+                dob_validation = self.validator.has_validate_date_format(
                     dob_str)  # Validate dob is in correct format or not.
                 if dob_validation[0] is False:  # DOB validation failed.
                     print(dob_validation[1])  # Show DOB invalid message.
                 elif gender_str is not None:
                     # All validation passed, finally check for duplicate.
-                    if self.__validator.check_if_patient_exits(first_name_str,
+                    if self.validator.check_if_patient_exits(first_name_str,
                                                                last_name_str,
                                                                dob_str,
                                                                gender_str):
@@ -202,7 +202,7 @@ class AddUpdateFlowHandler:
         address = input(AddUpdateFlowHandler.ADDRESS_INPUT_MESSAGE)
 
         # Perform input string validation for invalid characters
-        text_has_valid_chars = self.__validator.has_valid_character(address)
+        text_has_valid_chars = self.validator.has_valid_character(address)
         if text_has_valid_chars[0] is False:  # In-valid input characters.
             # Error! Print invalid character message.
             print(text_has_valid_chars[1])
@@ -216,7 +216,7 @@ class AddUpdateFlowHandler:
             else:
                 address1, address2, city, state, address_zip = \
                     address_input_list
-                if self.__validator.is_zip_code_valid(address_zip) is False:
+                if self.validator.is_zip_code_valid(address_zip) is False:
                     # User entered invalid zip code, show message.
                     print(self.ERROR_ZIP_CODE)
                 else:
@@ -244,7 +244,7 @@ class AddUpdateFlowHandler:
             AddUpdateFlowHandler.CONTACT_INPUT_MESSAGE)
 
         # Perform input string validation for invalid characters
-        text_has_valid_chars = self.__validator. \
+        text_has_valid_chars = self.validator. \
             has_valid_character(contact_details)
         if text_has_valid_chars[0] is False:  # In-valid input characters.
             # Error! Print invalid character message.

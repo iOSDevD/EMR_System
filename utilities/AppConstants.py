@@ -44,16 +44,18 @@ class AppConstants:
     COLUMN_RANGE = range(0, MAX_COLUMN_COUNT)
 
     MAIN_SCREEN_ADD_NEW_PATIENT_KEY, MAIN_SCREEN_SEARCH_PATIENT_KEY, \
-        MAIN_SCREEN_PRINT_KEY, MAIN_SCREEN_SIGN_OFF_KEY = \
-        "a", "b", "c", "d"
+    MAIN_SCREEN_PRINT_KEY, MAIN_SCREEN_STATISTICS_KEY, \
+    MAIN_SCREEN_SIGN_OFF_KEY = \
+        "a", "b", "c", "d", "e"
 
     OPTIONS = {MAIN_SCREEN_ADD_NEW_PATIENT_KEY: "Add a new Patient",
                MAIN_SCREEN_SEARCH_PATIENT_KEY: "Search Patient",
                MAIN_SCREEN_PRINT_KEY: "Print all Patient Records",
+               MAIN_SCREEN_STATISTICS_KEY: "Stats of Patient Records",
                MAIN_SCREEN_SIGN_OFF_KEY: "Sign off"}
 
     PATIENT_LOOK_UP_UPDATE_QUESTIONNAIRE_KEY, \
-        PATIENT_LOOK_UP_UPDATE_PATIENT_KEY, PATIENT_LOOK_UP_DELETE_PATIENT_KEY \
+    PATIENT_LOOK_UP_UPDATE_PATIENT_KEY, PATIENT_LOOK_UP_DELETE_PATIENT_KEY \
         = "a", "b", "c"
 
     LOOKUP_OPTIONS = {
@@ -69,7 +71,10 @@ class AppConstants:
     OPTIONS_LOOKUP_LIST = ["{}.{}".format(k, v) for k, v in
                            LOOKUP_OPTIONS.items()]
 
-    GENDER_DICTIONARY = {"F": "Female", "M": "Male", "O": "Other"}
+    GENDER_VALUE_MALE, GENDER_VALUE_FEMALE, GENDER_VALUE_OTHER = \
+        "Male", "Female", "Other"
+    GENDER_DICTIONARY = {"F": GENDER_VALUE_FEMALE, "M": GENDER_VALUE_MALE,
+                         "O": GENDER_VALUE_OTHER}
 
     INPUT_DELIMITER = "$"
 

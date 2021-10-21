@@ -114,6 +114,17 @@ class PatientValidator:
 
         return True, result_date_str
 
+    def check_if_patient_exits(self, firstname, lastname, dob,
+                               gender):
+        """Identify if the patient with Name, date of birth or gender exists
+        in the CSV file. Returns True if patient exists else False. Helps
+        to avoid adding duplicate patients during patient registration"""
+        patient_list = self.__get_records_matching(firstname, lastname, dob,
+                                                   gender)
+        if len(patient_list) > 0:
+            return True
+        else:
+            return False
 
 # Unit Tests
 if __name__ == "__main__":
@@ -134,7 +145,7 @@ if __name__ == "__main__":
                                                     "01/01/1980", "Male")
     assert searched_patient is not None and \
            len(searched_patient.get_patient_id()) > 0, (
-            "Object should not be none and patient id should exists.")
+        "Object should not be none and patient id should exists.")
 
     # 2. Test case to get gender value from its abbreviation.
     assert validator.validate_gender("f") == "Female", \
