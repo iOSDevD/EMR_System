@@ -59,7 +59,8 @@ class StatisticsFlowHandler:
                 # Answers will be returned as list so that we can check
                 # first question which is covid one is answered or not.
                 answer_list = patient.get_questionnaire_as_list()
-                if len(answer_list) > 0 and answer_list[0] == 1:
+                if answer_list is not None and \
+                        len(answer_list) > 0 and answer_list[0] == 1:
                     # Patient had covid
                     state = patient.get_address_state()
 

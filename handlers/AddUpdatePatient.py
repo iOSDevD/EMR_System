@@ -112,8 +112,8 @@ class AddUpdateFlowHandler:
                 if self.__is_in_new_patient_mode() is False:
                     return self.__patient
                 else:
-                    new_patient_id = len(csv.read_all_records_row_data())
-                    self.__patient.set_patient_id(str(new_patient_id))
+                    new_patient_id = self.validator.generate_new_patient_id()
+                    self.__patient.set_patient_id(new_patient_id)
                     patient_details_list = \
                         self.__patient.get_list_template_to_save()
                     csv.write_new_record(patient_details_list)
@@ -216,9 +216,12 @@ class AddUpdateFlowHandler:
             else:
                 address1, address2, city, state, address_zip = \
                     address_input_list
+                state_validation = self.validator.has_valid_state(state)
                 if self.validator.is_zip_code_valid(address_zip) is False:
                     # User entered invalid zip code, show message.
                     print(self.ERROR_ZIP_CODE)
+                elif state_validation[0] is False:  # State validation failed.
+                    print(state_validation[1])  # print error message
                 else:
                     # All validation passed update the patient attribute.
                     self.__patient.set_address_line_1(address1)

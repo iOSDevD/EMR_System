@@ -11,7 +11,6 @@ Patient Validator helps to validate the input values during search of patient.
 from datetime import datetime
 import os
 import re
-import string
 
 from utilities.AppConstants import AppConstants
 from utilities.CSVUtility import FileHandlerUtility
@@ -22,13 +21,27 @@ class PatientValidator:
     validates gender abbreviation and returns appropriate value to be saved
     into the CSV file."""
 
+    # Regex for 5 digit zip code.
     REGEX_FOR_ZIP_CODE = r"^[0-9]{5}$"
 
+    # Regex for permissible characters.
     REGEX_FOR_INVALID_CHARACTERS = r"[{}]".format(",{}\\[\\]")
 
+    # Valid date format for mm/dd/YYYY
     DATE_FORMAT = "%m/%d/%Y"
 
+    # Set of Valid states abbreviation.
+    VALID_STATES = {"AK", "AL", "AR", "AS", "AZ", "CA", "CO", "CT", "DC", "DE",
+                    "FL", "GA", "GU", "HI", "IA", "ID", "IL", "IN", "KS", "KY",
+                    "LA", "MA", "MD", "ME", "MI", "MN", "MO", "MP", "MS", "MT",
+                    "NC", "ND", "NE", "NH", "NJ", "NM", "NV", "NY", "OH", "OK",
+                    "OR", "PA", "PR", "RI", "SC", "SD", "TN", "TX", "UM", "UT",
+                    "VA", "VI", "VT", "WA", "WI", "WV", "WY"}
+
     def __get_records_matching(self, firstname, lastname, dob, gender):
+        """Returns a list of patients matching first name, last name , date of
+        birth and gender. If any of these input values are empty it returns
+        default None."""
         if len(firstname.strip()) != 0 and len(lastname.strip()) != 0 and len(
                 dob.strip()) != 0:
             patient_data = FileHandlerUtility().read_all_records_row_data()
@@ -126,6 +139,33 @@ class PatientValidator:
         else:
             return False
 
+    def has_valid_state(self, state_str):
+        """Validates the state and returns a upper case formatted state
+        abbreviation. Value should be one in the VALID_STATES set.
+        If validation is false it returns false and error message."""
+        if len(state_str) == 2:
+            state_str = state_str.upper()
+            if state_str in PatientValidator.VALID_STATES:
+                return True, state_str
+        return False, "Error! Please enter a two character valid state value." \
+                      " '{}' is invalid".format(state_str)
+
+    def generate_new_patient_id(self):
+        """Generates a new patient id from the CSV list. New patient id
+        returned is one plus the max patient id. In case the CSV is empty
+        it will return 1"""
+        csv = FileHandlerUtility()
+        patient_list = csv.read_all_records_row_data()
+        if len(patient_list) > 0:
+            patient_id_list = [int(patient.get_patient_id()) for patient in
+                               patient_list]  # create int list of patient ids
+            # new patient id is max patient id + 1
+            new_patient_id = str(max(patient_id_list) + 1)
+            return new_patient_id  # Return the result - new patient id
+        else:
+            return "1"  # There are no records in CSV so new patient id is 1
+
+
 # Unit Tests
 if __name__ == "__main__":
     print("Started Executing test case in PatientValidator")
@@ -145,7 +185,7 @@ if __name__ == "__main__":
                                                     "01/01/1980", "Male")
     assert searched_patient is not None and \
            len(searched_patient.get_patient_id()) > 0, (
-        "Object should not be none and patient id should exists.")
+            "Object should not be none and patient id should exists.")
 
     # 2. Test case to get gender value from its abbreviation.
     assert validator.validate_gender("f") == "Female", \
@@ -160,12 +200,14 @@ if __name__ == "__main__":
     assert validator.validate_gender("xas") is None, \
         "For invalid input it should return None"
 
+    # 3. Test zip code
     assert validator.is_zip_code_valid("19105"), ("19105 should be a valid "
                                                   "zip code")
 
     assert validator.is_zip_code_valid("19105-") is False, (
         "19105- should be a in-valid zip code")
 
+    # 4. Test input does not have invalid or prohibited character.
     assert validator.has_valid_character("{}-Hello")[0] is False, (
         "Result should be False as it has invalid characters"
     )
@@ -174,6 +216,7 @@ if __name__ == "__main__":
         "Result should be True as it has valid characters"
     )
 
+    # 5. Test if date format is valid
     assert validator.has_validate_date_format("1/1/80")[0] is False, (
         "Result should be False, as it is not in mm/dd/yyyy"
     )
@@ -184,5 +227,17 @@ if __name__ == "__main__":
         "Result should be True, and return date should be formatted in "
         "case we don't enter two digits for month and day."
     )
+
+    # 6. Test if states entered are correct or not.
+    assert validator.has_valid_state("MA")[0] is True, (
+        "MA is a valid state abbreviation result, should return True")
+
+    assert validator.has_valid_state("xy")[0] is False, (
+        "XY is a in valid state abbreviation result, should return False")
+
+    # 7. Test new patient should be generated and greater than 0
+    assert int(validator.generate_new_patient_id()) > 0, (
+        "New patient id should be generated when requested and "
+        "should be greater than 0")
 
     print("Success! Completed Executing test case in PatientValidator")
