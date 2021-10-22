@@ -14,6 +14,8 @@
 13,John,Legend,01/20/1978,Male,3 cherry street,Apt 90,Bar Harbor,ME,04069,210-212-9191,legend.john@bu.edu,"[1,-1,-1,-1]"
 14,Harry,Styles,08/20/1985,Male,4 orange street,Apt 1,Arlington,TN,38002,211-232-9124,harry.styles@bu.edu,"[1,-1,-1,-1]"
 15,Rosie,Stewart,08/10/1998,Other,1 Circle Drive,,Antioch,TN,37013,199-299-3999,rosie@bu.edu,"[1,1,0,0]"
-16,William,Smith,02/20/1977,Male,1 Palace Drive,,Trenton,NJ,08601,718-191-1910,william@smith.com,
-17,Karie,Jonas,08/26/1995,Female,1 London Drive,Apt 7,Newton,MA,02456,111-222-3333,karie@bu.com,
-18,Ava,Gardner,04/11/1970,Female,20 Rose Drive,,Nashua,NH,03060,718-181-0191,eva.garnder@bu.com,
+16,William,Smith,02/20/1977,Male,1 Palace Drive,,Trenton,NJ,08601,718-191-1910,william@smith.com,"[-1,-1,-1,-1]"
+17,Karie,Jonas,08/26/1995,Female,1 London Drive,Apt 7,Newton,MA,02456,111-222-3333,karie@bu.com,"[-1,-1,-1,-1]"
+18,Ava,Gardner,04/11/1970,Female,20 Rose Drive,,Nashua,NH,03060,718-181-0191,eva.garnder@bu.com,"[-1,-1,-1,-1]"
+19,Ronald,Weasley,03/08/2000,Male,1 Queens Drive,Apt 2,Burlington,MA,01803,111-222-3333,ronald@bu.edu,"[-1,-1,-1,-1]"
+20,Rowan,Jacob,06/07/1983,Male,1 Newton drive,Apt 5,Hoboken,NJ,07030,222-333-4444,rowan@bu.edu,"[1,1,0,-1]"

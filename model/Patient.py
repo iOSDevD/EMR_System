@@ -11,6 +11,7 @@ is re-presented by attribute `self.__patient_id`.
 import copy
 
 from utilities.AppConstants import AppConstants
+from utilities.Questionnaire import Questionnaire
 
 
 class Patient:
@@ -180,6 +181,11 @@ class Patient:
     def get_list_template_to_save(self):
         """Creates a template list to be saved into CSV from the current
         state of the patient object."""
+
+        # New patient would not have questionnaires answered
+        if len(self.__questionnaire) == 0:  # Default each question to skipped
+            self.__questionnaire = Questionnaire(). \
+                get_default_questionnaire_answers()
         template_list = [self.__patient_id,
                          self.__first_name,
                          self.__last_name,

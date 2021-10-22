@@ -148,7 +148,7 @@ class LookUpFlowHandler:
         answers = []  # Default empty list of answers
 
         # current list of questions
-        questionnaire_list = Questionnaire.questionnaire_list
+        questionnaire_list = Questionnaire().questionnaire_list
 
         current_index = 0  # Start from question at index 0
 

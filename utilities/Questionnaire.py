@@ -48,7 +48,7 @@ class Questionnaire:
         # Defaults to -1 i.e not answered for empty list, helps to show
         # question was not answered or skipped.
         if answers is None or len(answers) == 0:
-            answers = [-1] * len(self.questionnaire_list)
+            answers = self.__get_all_answers_as_skipped()
 
         options_dict = {0: "No", 1: "Yes", -1: "Not answered or skipped"}
 
@@ -86,6 +86,17 @@ class Questionnaire:
         """
         return str(question) + "\nPlease enter y for Yes or n " \
                                "for No and enter to skip"
+
+    def get_default_questionnaire_answers(self):
+        """For new patient since the intake form will not be answered all
+        answers should have value skipped. It returns string value of
+        answers [-1,-1,-1,-1]"""
+        default_answers_list = self.__get_all_answers_as_skipped()
+        return self.get_formatted_answers_to_save(default_answers_list)
+
+    def __get_all_answers_as_skipped(self):
+        """Returns Default answers list for the questionnaire as skipped."""
+        return [-1] * len(self.questionnaire_list)
 
 
 # Unit Tests
@@ -128,5 +139,11 @@ if __name__ == "__main__":
     assert questionnaire.get_question_str_for_prompt(input_question). \
         startswith(str(input_question)), ("Question-Option part "
                                           "of the prompt is missing.")
+
+    # 4. Test case for default answers to save, which will have all answers
+    # as skipped i.e -1
+    assert questionnaire.get_default_questionnaire_answers() == \
+           "[-1,-1,-1,-1]", ("Default answers to save should all have default "
+                             "answer as skipped i.e -1")
 
     print("Success! Completed Executing test case in Questionnaire")
