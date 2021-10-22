@@ -22,8 +22,8 @@ class PrintFlowHandler:
     # Prompt message to be displayed to the user, either to print a specific
     # record or skip by tapping enter.
     PRINT_INPUT_MESSAGE = "Would you like to print patient detail as " \
-                          "summary? If yes please enter the patient id or " \
-                          "simply press enter again to exit this option"
+                          "summary?\nIf yes please enter the patient id or " \
+                          "simply press enter again to exit this option."
 
     # Format to print the patient summary with the help of Patient object
     # and questionnaire object.

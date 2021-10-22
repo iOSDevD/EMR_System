@@ -36,9 +36,16 @@ class StatisticsFlowHandler:
     STATE_COVID_ADDITIONAL_MESSAGE = "There are in total {} patients, who " \
                                      "had covid found in {} different states\n"
 
-    # Used by Table View to show headers
+    # Headers use by Table View with state and covid percentage distribution.
     STATE_COVID_HEADER_ROWS = ["State", "Covid", "Percentage Distribution"]
 
+    # Gender and percentage distribution main message.
+    GENDER_DISTRIBUTION_MAIN_MESSAGE = "\nBelow are the results for gender " \
+                                       "and its percentage distribution " \
+                                       "with respect to total number of " \
+                                       "patients.\n"
+
+    # Headers used by Table view with gender and percentage distribution
     GENDER_HEADER_ROWS = ["Gender", "Percentage distribution"]
 
     def start_print_statisitics(self):
@@ -100,6 +107,8 @@ class StatisticsFlowHandler:
         # Get the patient list.
         patient_list = FileHandlerUtility().read_all_records_row_data()
         if len(patient_list) > 0:  # Patient list is not empty.
+            # Print main header message before printing Table
+            print(StatisticsFlowHandler.GENDER_DISTRIBUTION_MAIN_MESSAGE)
             # Male patient count
             male_count = len([pt for pt in patient_list if
                               pt.get_gender() == "Male"])
