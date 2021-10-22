@@ -5,7 +5,10 @@ Date: 10/16/2021
 Homework Problem # Project
 Description of Problem (1-2 sentence summary in your own words):
 
-This program handles the patient look up flow.
+This program handles the patient look up flow. It has multiple functionalities
+like update demographic details, delete patient and update the intake form
+submitted by the patient. Intake form details like patient had Covid, helps
+to create the Statistics.
 """
 import copy
 
@@ -76,7 +79,9 @@ class LookUpFlowHandler:
         """
         print("-" * 20)
         print("Main -> Patient Look Up\n")
-        searched_patient = None
+
+        searched_patient = None  # Patient object found with look up
+
         while True:  # Keep prompting user for patient look up entries.
             # Display input message
             name_dob = input(self.__UPDATE_DEMOGRAPHIC_MESSAGE)
@@ -86,6 +91,8 @@ class LookUpFlowHandler:
             name_dob_input_list = name_dob.split(AppConstants.INPUT_DELIMITER)
             if len(name_dob_input_list) != \
                     LookUpFlowHandler.BASIC_DEMOGRAPHIC_ENTRIES:
+                # User entered less or more entries separated by delimiter.
+                # Show the error message.
                 print(self.__ERROR_MESSAGE_INVALID_PRIMARY_ENTRIES)
             else:
                 # Multiple assignment from list to variables.
@@ -123,17 +130,19 @@ class LookUpFlowHandler:
             lookup_options_str = input(
                 AppConstants().get_patient_look_up_prompt())
 
+            # Check if entered options matches the look up options dictionary
+            # keys.
             if lookup_options_str in AppConstants.LOOKUP_OPTIONS.keys():
                 if lookup_options_str == \
-                        AppConstants.PATIENT_LOOK_UP_UPDATE_QUESTIONNAIRE_KEY:
+                        AppConstants.LOOK_UP_UPDATE_QUESTIONNAIRE_KEY:
                     # Update questionnaire flow.
                     self.__start_questionnaire_flow(searched_patient)
                 elif lookup_options_str == \
-                        AppConstants.PATIENT_LOOK_UP_UPDATE_PATIENT_KEY:
+                        AppConstants.LOOK_UP_UPDATE_PATIENT_KEY:
                     # Update patient demographic detail flow.
                     self.__update_patient_details(searched_patient)
                 elif lookup_options_str == \
-                        AppConstants.PATIENT_LOOK_UP_DELETE_PATIENT_KEY:
+                        AppConstants.LOOK_UP_DELETE_PATIENT_KEY:
                     # Delete a patient flow.
                     self.__delete_patient(searched_patient)
             else:  # Any other input text, simply exit the LookUpPatient flow.
@@ -198,9 +207,11 @@ class LookUpFlowHandler:
         """
         if FileHandlerUtility().delete_a_record(
                 patient.get_patient_id()) is True:  # Delete Success!
+            # Print success message for delete success.
             print(self.__SUCCESS_PATIENT_DELETE.format(
                 patient.get_first_name(), patient.get_last_name()))
         else:  # Delete Failed!
+            # Print error message for delete failed.
             print(self.__ERROR_FAILED_TO_DELETE_PATIENT.format(
                 patient.get_first_name(), patient.get_last_name()))
 
@@ -222,17 +233,22 @@ class LookUpFlowHandler:
             # Check if there is any difference between the object being saved
             # and the current patient object
             if updated_patient != patient:  # Found difference, so save
-                csv = FileHandlerUtility()
+                file_handler = FileHandlerUtility()  # CSV, File Handle object
+
+                # Create data to save as list, since CSV writes data row as
+                # a list.
                 patient_details_list = updated_patient. \
                     get_list_template_to_save()
-                csv.update_a_record(patient_details_list,
-                                    updated_patient.get_patient_id())
+
+                # Update the patient record.
+                file_handler.update_a_record(patient_details_list,
+                                             updated_patient.get_patient_id())
                 print(LookUpFlowHandler.__SUCCESS_PATIENT_UPDATE.format(
                     patient.get_first_name(), patient.get_last_name()))
             else:  # No difference, nothing to save.
                 print(LookUpFlowHandler.__PATIENT_DATA_UP_TO_DATE.format(
                     patient.get_first_name(), patient.get_last_name()))
-        else:
+        else:  # In case we get patient object as None, we show failure.
             print(LookUpFlowHandler.__ERROR_FAILED_TO_UPDATE_DEMOGRAPHICS)
 
 

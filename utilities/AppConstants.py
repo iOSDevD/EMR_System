@@ -1,12 +1,13 @@
 """
 Nikunj Upadhyay
 Class: CS 521 - Fall 1
-Date: 10/16/2021[
+Date: 10/16/2021
 Homework Problem # Project
 Description of Problem (1-2 sentence summary in your own words):
 
 The program holds two constant class which acts as helper to get messages
-for main screen and patient login.
+for main screen and patient login, patient look up and other uses like having
+Gender description value.
 
 """
 
@@ -15,19 +16,25 @@ class LoginConstants:
     """Constants for Login Screen, for example welcome message and login
     messages"""
 
+    # Welcome message when EMRSystemStart.py is called.
     WELCOME_MESSAGE = "\n\n################# Welcome to the " \
                       "BU Medical System #################\n\n"
 
+    # Prompt the user to enter user name and password separated by space.
     EMR_LOGIN_CREDENTIAL_PROMPT_MESSAGE = "Please enter the user name and " \
                                           "password separated by space, to " \
                                           "login into the EMR system"
 
+    # Validation was success, use this text to show login success message.
     EMR_LOGIN_SUCCESS_MESSAGE = "Success! Loading the System now.........\n"
 
+    # Validation failed, use this text to show failure message.
     EMR_LOGIN_INVALID_CREDENTIALS_MESSAGE = "Error! Invalid username or " \
                                             "password. Please try again with " \
                                             "a valid username and password"
 
+    # Input entry validation failed, use this text to show message when
+    # username and password are not space separated.
     CREDENTIAL_USER_ENTRY_ERROR_MESSAGE = "Error! Please try again with " \
                                           "username and password separated " \
                                           "by space."
@@ -39,38 +46,45 @@ class AppConstants:
     empty template list of patient to be saved or create a new patient from
     scratch"""
 
+    # Max column count in the CSV, helps to create a empty list template
     MAX_COLUMN_COUNT = 13
 
-    COLUMN_RANGE = range(0, MAX_COLUMN_COUNT)
-
+    # Main Screen option keys, these options are available after the login
     MAIN_SCREEN_ADD_NEW_PATIENT_KEY, MAIN_SCREEN_SEARCH_PATIENT_KEY, \
-    MAIN_SCREEN_PRINT_KEY, MAIN_SCREEN_STATISTICS_KEY, \
-    MAIN_SCREEN_SIGN_OFF_KEY = \
-        "a", "b", "c", "d", "e"
+        MAIN_SCREEN_PRINT_KEY, MAIN_SCREEN_STATISTICS_KEY, \
+        MAIN_SCREEN_SIGN_OFF_KEY = "a", "b", "c", "d", "e"
 
+    # Main Screen options dictionary, having the option (ex: a) as key and
+    # value as description about the operation that it can perform.
     OPTIONS = {MAIN_SCREEN_ADD_NEW_PATIENT_KEY: "Add a new Patient",
                MAIN_SCREEN_SEARCH_PATIENT_KEY: "Search Patient",
                MAIN_SCREEN_PRINT_KEY: "Print all Patient Records",
                MAIN_SCREEN_STATISTICS_KEY: "Statistics of Patient Records",
                MAIN_SCREEN_SIGN_OFF_KEY: "Sign off"}
 
-    PATIENT_LOOK_UP_UPDATE_QUESTIONNAIRE_KEY, \
-    PATIENT_LOOK_UP_UPDATE_PATIENT_KEY, PATIENT_LOOK_UP_DELETE_PATIENT_KEY \
-        = "a", "b", "c"
+    # Patient Look up option, sub options. These options are available
+    # after the patient look up finds a patient.
+    LOOK_UP_UPDATE_QUESTIONNAIRE_KEY, LOOK_UP_UPDATE_PATIENT_KEY, \
+        LOOK_UP_DELETE_PATIENT_KEY = "a", "b", "c"
 
+    # Patient look up options dictionary, having the option (ex: a) as key
+    # and value as description about the operation that it can perform.
     LOOKUP_OPTIONS = {
-        PATIENT_LOOK_UP_UPDATE_QUESTIONNAIRE_KEY: "Add/Update Intake form",
-        PATIENT_LOOK_UP_UPDATE_PATIENT_KEY: "Update patient "
-                                            "details (Address and Contact)",
-        PATIENT_LOOK_UP_DELETE_PATIENT_KEY: "Delete the patient"}
+        LOOK_UP_UPDATE_QUESTIONNAIRE_KEY: "Add/Update Intake form",
+        LOOK_UP_UPDATE_PATIENT_KEY: "Update patient "
+                                    "details (Address and Contact)",
+        LOOK_UP_DELETE_PATIENT_KEY: "Delete the patient"}
 
-    FLOW_INITIATOR_OPTIONS = """What would you like to do?\n{}"""
-
+    # Gender values used for presentation and saving to file.
     GENDER_VALUE_MALE, GENDER_VALUE_FEMALE, GENDER_VALUE_OTHER = \
         "Male", "Female", "Other"
+
+    # Gender dictionary with keys as single character values with its
+    # equivalent gender description value.
     GENDER_DICTIONARY = {"F": GENDER_VALUE_FEMALE, "M": GENDER_VALUE_MALE,
                          "O": GENDER_VALUE_OTHER}
 
+    # Input Delimiter used during input to capture multiple values.
     INPUT_DELIMITER = "$"
 
     def get_main_screen_prompt(self):

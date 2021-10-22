@@ -4,6 +4,10 @@ Class: CS 521 - Fall 1
 Date: 10/16/2021
 Homework Problem # Project
 Description of Problem (1-2 sentence summary in your own words):
+
+CSV Utility helper which performs multiple operations like writing/appending
+a new record to the file, deleting a patient entry, reading all records as
+list of string or Patient object.
 """
 import copy
 import csv
@@ -19,45 +23,54 @@ class FileHandlerUtility:
     on a input file.
     """
 
-    __INPUT_FILE_NAME = "PatientRecords.csv"
-    __INPUT_FOLDER_NAME = "InputFiles"
-    __FILE_ENCODING = 'utf-8-sig'
+    # CSV  file name holding the patient records.
+    __INPUT_FILE_NAME = "PatientRecords.csv"  # Private static attribute
+
+    # Folder in which Input file name is present
+    __INPUT_FOLDER_NAME = "InputFiles"  # Private static attribute
+
+    # Encoding to be used while encoding or decoding the input file.
+    __FILE_ENCODING = 'utf-8-sig'  # Private static attribute
 
     def __get_input_file_path(self):
+        """Get the path of the file with folder that it resides in, using
+        a platform independent approach."""
         return os.path.join(self.__INPUT_FOLDER_NAME, self.__INPUT_FILE_NAME)
 
     def read_all_records(self, rows_as_patient=False):
         """ Read records from a file and returns a tuple of header and rows.
 
         Header represent first row in the CSV file and rows are the ones
-        which hold patient record.
+        which hold patient record. Returned Tuple at index 0 represents header
+        and at index 1 its list of rows (as list of string values or list of
+        Patient object)
 
         :param rows_as_patient: value should be True
-        :return: Tuple of list representing rows or header. In case the reading
-                of file it  returns tuple of empty list.
+        :return: Tuple of list representing header(0) and rows(1).
+                In case the reading of file it returns tuple of empty list.
         """
         workbook_file = None  # Default to None
 
         try:
             # Open the .csv file with read only mode and utf-8 encoding.
             workbook_file = open(self.__get_input_file_path(), "r",
-                                 encoding=self.__FILE_ENCODING)
+                                 encoding=FileHandlerUtility.__FILE_ENCODING)
         except IOError:
             print("Failed to read PatientRecords.csv")
 
         headers = []  # Default empty header list
         rows = []  # Default empty rows list
 
-        if workbook_file is not None:
-            workbook_reader = csv.reader(workbook_file)
-            for row in workbook_reader:
+        if workbook_file is not None:  # Read only if file opening was success
+            workbook_reader = csv.reader(workbook_file)  # Iterator to read line
+            for row in workbook_reader:  # Iterate each row in CSV
                 if len(headers) == 0:  # Set header only once at the start.
                     headers = row[:]  # Shallow copy row
                 else:  # Rest of them are rows not headers.
                     if rows_as_patient:
-                        rows.append(Patient(row))
+                        rows.append(Patient(row))  # Row as Patient Object
                     else:
-                        rows.append(row)
+                        rows.append(row)  # Row as list of string.
 
             workbook_file.close()  # Close the opened file after processing.
 
@@ -70,7 +83,7 @@ class FileHandlerUtility:
         :return: list of Patient objects.
         """
         csv_data = self.read_all_records(rows_as_patient=True)
-        return csv_data[1]
+        return csv_data[1]  # Tuple at index 1 has patient rows.
 
     def write_new_record(self, new_patient_data_list):
         """ Appends a new patient to the csv file.
@@ -78,19 +91,24 @@ class FileHandlerUtility:
         :param new_patient_data_list: List of entries represented in the
             columns of csv, starting from patient id to questionnaire.
         """
-        workbook_file = None
+        workbook_file = None  # Default to None
 
         try:
+            # Open the .csv file with append mode to add new record entry at
+            # the end of the file and use utf-8 encoding.
             workbook_file = open(self.__get_input_file_path(), "a",
-                                 encoding=self.__FILE_ENCODING,
+                                 encoding=FileHandlerUtility.__FILE_ENCODING,
                                  newline="")
         except IOError:
             print("Failed to read PatientRecords.csv")
 
-        if workbook_file is not None:
+        if workbook_file is not None:  # Append only if file opening was success
+            # Get the writer object which converts user's data into delimited
+            # strings.
             workbook_writer = csv.writer(workbook_file)
+            # Write iterable object ex: list to the file.
             workbook_writer.writerow(new_patient_data_list)
-            workbook_file.close()
+            workbook_file.close()  # Close the opened file after processing.
 
     def update_a_record(self, new_patient_data_list, patient_id):
         """ Updates the demographic details for the provided patient id.
@@ -99,28 +117,38 @@ class FileHandlerUtility:
             columns of csv, starting from patient id to questionnaire.
         :param patient_id: Patient id for which we need to update the record.
         """
+        # Read all existing records to be re-written
         existing_records = self.read_all_records()
-        workbook_file = None
+        workbook_file = None  # Default to None
 
         try:
+            # Open the .csv file with write mode which clears the current file
+            # content and helps to write new entries while replacing the
+            # specified patient record and use utf-8 encoding.
             workbook_file = open(self.__get_input_file_path(), "w",
-                                 encoding=self.__FILE_ENCODING,
+                                 encoding=FileHandlerUtility.__FILE_ENCODING,
                                  newline="")
         except IOError:
             print("Failed to read PatientRecords.csv")
 
-        if workbook_file is not None:
+        if workbook_file is not None:  # Update only if file opening was success
+            # Get the writer object which converts user's data into delimited
+            # strings.
             workbook_writer = csv.writer(workbook_file)
-            header = existing_records[0]
-            workbook_writer.writerow(header)
+            header = existing_records[0]  # Get the header from existing records
+            workbook_writer.writerow(header)  # Write the header first
+
+            # Get all rows from existing records
             existing_rows = existing_records[1]
-            for record in existing_rows:
+            for record in existing_rows:  # Iterate and write patient row.
                 if record[0] == patient_id and len(new_patient_data_list) == 13:
+                    # Patient id match found, so skip the current record
+                    # and use new record entry to have updated value.
                     workbook_writer.writerow(new_patient_data_list)
-                else:
+                else:  # Patient id match not found, keep adding current record
                     workbook_writer.writerow(record)
 
-            workbook_file.close()
+            workbook_file.close()  # Close the opened file after processing.
 
     def delete_a_record(self, patient_id):
         """ Deletes the record for the provided patient id.
@@ -129,30 +157,35 @@ class FileHandlerUtility:
         :return: True if delete was success else default None.
         """
         existing_records = self.read_all_records()  # Records to be re-written
-        workbook_file = None
+        workbook_file = None  # Default to None
 
         try:
-            # Open file object with write mode, so as to clear the existing
-            # file content and re-write rows.
+            # Open file object with write mode, which clears the current file
+            # content and helps to write existing entry while skipping the
+            # entry which we want to delete and use utf-8 encoding.
             workbook_file = open(self.__get_input_file_path(), "w",
-                                 encoding=self.__FILE_ENCODING,
+                                 encoding=FileHandlerUtility.__FILE_ENCODING,
                                  newline="")
         except IOError:
             print("Failed to read PatientRecords.csv")
 
         if workbook_file is not None:
             workbook_writer = csv.writer(workbook_file)
-            header = existing_records[0]
-            workbook_writer.writerow(header)
+            header = existing_records[0]  # Get the header from existing records
+            workbook_writer.writerow(header)  # Write the header first
+
+            # Get all rows from existing records
             existing_rows = existing_records[1]
-            for record in existing_rows:
+            for record in existing_rows:  # Iterate and write patient row.
+                # Write back all records except the one to be deleted.
                 if record[0] != patient_id:
                     workbook_writer.writerow(record)
 
-            workbook_file.close()  # Close file object
-            return True
+            workbook_file.close()  # Close the opened file after processing.
+            return True  # Delete was success.
 
 
+# Unit Tests
 if __name__ == "__main__":
     print("Started Executing test case in FileHandlerUtility")
 

@@ -4,7 +4,14 @@ Class: CS 521 - Fall 1
 Date: 10/16/2021
 Homework Problem # Project
 Description of Problem (1-2 sentence summary in your own words):
+
+This program handles the questionnaire part. It can print the questionnaire
+summary using get_questionnaire_to_print() or generate a formatted string to
+which can be saved to CSV file.
+Possible options to answer a questionnaire can be obtained with
+get_question_str_for_prompt(),
 """
+
 from model.Question import Question
 
 
@@ -14,19 +21,25 @@ class Questionnaire:
     enters input.
     """
 
+    # Private static question 1
     __question_1 = Question("Did you had covid any time before your visit?",
                             ["Yes", "No"])
+
+    # Private static question 2
     __question_2 = Question("Do you have insurance on file?", ["Yes", "No"])
+
+    # Private static question 3
     __question_3 = Question("Do you want us to reach out to you via SMS or "
                             "E-mail for further appointments", ["Yes", "No"])
 
+    # Private static question 4
     __question_4 = Question("Do you have migraine or had earlier?",
                             ["Yes", "No"])
 
-    # questionnaire_list = [__question_1, __question_2, __question_3,
-    #                       __question_4]
-
+    # Static Set of possible Yes options
     YES_ANSWER_SET = {"Y", "YES"}
+
+    # Static Set of possible No options
     NO_ANSWER_SET = {"N", "NO"}
 
     def __init__(self):
@@ -50,17 +63,21 @@ class Questionnaire:
         if answers is None or len(answers) == 0:
             answers = self.__get_all_answers_as_skipped()
 
+        # Possible list of answers for presentation
         options_dict = {0: "No", 1: "Yes", -1: "Not answered or skipped"}
 
+        # Map questionnaire with answers, answer will be represented by its
+        # corresponding values in options_dict
         result_map = map(
             lambda question, answer: "{}\nAnswer: {}".format(question,
                                                              options_dict[
                                                                  answer]),
             self.questionnaire_list, answers)
 
+        # Convert mapped object to a list
         result_list = list(result_map)
 
-        return "\n".join(result_list)
+        return "\n".join(result_list)  # Join Q and A, separated by new line.
 
     def get_formatted_answers_to_save(self, answers):
         """ Generates a string which represents the answers and which case be

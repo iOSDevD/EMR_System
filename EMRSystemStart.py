@@ -27,7 +27,7 @@ from handlers.PrintPatientRecord import PrintFlowHandler
 print(LoginConstants.WELCOME_MESSAGE)
 
 while True:  # Keep prompting user till valid user name and password is entered
-    # Prompt user to enter user name and passsword.
+    # Prompt user to enter user name and password.
     input_str = input(LoginConstants.EMR_LOGIN_CREDENTIAL_PROMPT_MESSAGE)
 
     # Get the tuple into two variables, status and other holds the validation
@@ -61,7 +61,7 @@ while True:
             LookUpFlowHandler().lookup_patient_flow()
         elif selected_main_option_str == \
                 AppConstants.MAIN_SCREEN_STATISTICS_KEY:
-            PrintStatistics.StatisticsFlowHandler().start_print_statisitics()
+            PrintStatistics.StatisticsFlowHandler().start_print_statistics()
         elif selected_main_option_str == AppConstants.MAIN_SCREEN_SIGN_OFF_KEY:
             # user selects to sign off from the system
             print("\n\nSigning Off, from the System!....................")

@@ -48,7 +48,7 @@ class StatisticsFlowHandler:
     # Headers used by Table view with gender and percentage distribution
     GENDER_HEADER_ROWS = ["Gender", "Percentage distribution"]
 
-    def start_print_statisitics(self):
+    def start_print_statistics(self):
         """Prints the statistical data with available with the CSV file"""
         self.__print_patient_covid_state()  # Print State and Covid distribution
         self.__print_gender_distribution()  # Print Gender distribution
@@ -82,19 +82,20 @@ class StatisticsFlowHandler:
                 state_list = list(state_covid_dict.keys())  # Get all state's
                 state_list.sort()  # Sort it by  state
 
+                percentage_format_str = StatisticsFlowHandler.PERCENTAGE_FORMAT
                 # Create list of list of a row ex: [["MA","1","10%"]]
-                covid_count_list = [[e, str(state_covid_dict[e]),
-                                     StatisticsFlowHandler.PERCENTAGE_FORMAT.
-                                         format(state_covid_dict[e] /
-                                                total_covid_patients)]
-                                    for e in state_list]
+                covid_count_list = [[state, str(state_covid_dict[state]),
+                                     percentage_format_str.format(
+                                         state_covid_dict[state] /
+                                         total_covid_patients)]
+                                    for state in state_list]
                 # Print Main message about distribution
                 print(StatisticsFlowHandler.STATE_COVID_MAIN_MESSAGE)
                 # Print overview of statistics
                 print(StatisticsFlowHandler.STATE_COVID_ADDITIONAL_MESSAGE
                       .format(total_covid_patients, len(state_list)))
                 # Print the Covid and State distribution in tabular format.
-                TableView.Table.printTable(
+                TableView.Table().print_table(
                     StatisticsFlowHandler.STATE_COVID_HEADER_ROWS,
                     covid_count_list)
             else:  # Size of Sate and Covid dictionary is zero, Nothing to show.
@@ -124,7 +125,7 @@ class StatisticsFlowHandler:
             # Total Gender count - sum all count.
             total_patients = male_count + female_count + other_count
 
-            rows = list()
+            rows = list()  # List of rows having row data.
             male_percentage = male_count / total_patients
             # Create list of list for male row data.ex[["Male","10%"]]
 
@@ -144,5 +145,5 @@ class StatisticsFlowHandler:
                      other_count / total_patients)])
 
             # Print the Gender and percentage distribution in tabular format.
-            TableView.Table.printTable(StatisticsFlowHandler.GENDER_HEADER_ROWS,
-                                       rows)
+            TableView.Table().print_table(
+                StatisticsFlowHandler.GENDER_HEADER_ROWS, rows)

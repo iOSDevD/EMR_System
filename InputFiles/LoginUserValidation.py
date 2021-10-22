@@ -4,13 +4,16 @@ Class: CS 521 - Fall 1
 Date: 10/16/2021
 Homework Problem # Project
 Description of Problem (1-2 sentence summary in your own words):
+
+The program illustrate that it has functions which can be used
+to validate the user name and password.
 """
 from utilities.AppConstants import LoginConstants
 
 
 def is_logged_in_user_valid(user_name, password):
-    """ Validates if the user entered correct user name and password.
-    User name is case insensitive and password is case sensitive.
+    """ Function that validates if the user entered correct user name
+    and password. User name is case insensitive and password is case sensitive.
     """
     if user_name.upper() == "HELLO" and password == "World":
         return True  # User input matches user name and password.
@@ -47,13 +50,18 @@ def perform_credential_validation(user_name_password):
 
 # Unit Tests
 if __name__ == "__main__":
+    # help to run test case efficiently.
     print("Started Executing test case for functions in LoginUserValidation")
+
+    # 1. Test case check if user name and password are correct.
     assert is_logged_in_user_valid("hello", "World"), (
         "User name and password are valid so it should not fail.")
 
+    # Invalid password returns False.
     assert is_logged_in_user_valid("hello", "test") is False, (
         "User name and password are in-valid so it should fail.")
 
+    # Test user name and password string is not separated by space.
     validation_result_failure = perform_credential_validation("HelloWorld")
     assert validation_result_failure[0] is False and \
            validation_result_failure[1] == \
@@ -61,6 +69,8 @@ if __name__ == "__main__":
         "As user name and password are not whitespace separated "
         "or some error occurred, it should return appropriate error message.")
 
+    # Test user name and password string separated by space but does match
+    # with the record in the system".
     validation_result_invalid_credential = \
         perform_credential_validation("Hello test")
     assert validation_result_invalid_credential[0] is False and \

@@ -6,6 +6,10 @@ Homework Problem # Project
 Description of Problem (1-2 sentence summary in your own words):
 
 Patient Validator helps to validate the input values during search of patient.
+The program validates state, gender, zip code, checks if input has invalid
+characters like comma, date of birth is in valid format like mm/dd/YYYY.
+It also generates a patient id for new patient registration, the value of it
+will be unique as it simply increments the max value by 1.
 
 """
 from datetime import datetime

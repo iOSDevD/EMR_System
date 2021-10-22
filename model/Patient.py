@@ -202,17 +202,25 @@ class Patient:
         return template_list
 
     def __repr__(self):
-        pretty_print_data_list = list()
+        """ Repr magic method here is can be used to print the details of the
+         object. Since __str__ is not available, during print of the object
+         value it will call __repr__ method."""
+        pretty_print_data_list = list()  # Empty List to append strings
+
+        # Add patient id to the pretty print list
         pretty_print_data_list.append(
             "Patient ID: {}".format(self.get_patient_id()))
 
+        # Add DOB to the pretty print list
         pretty_print_data_list.append(
             "Date of Birth: {}".format(self.get_dob()))
 
+        # Add name to the pretty print list
         pretty_print_data_list.append("Name: {},{}".format(
             self.get_last_name(),
             self.get_first_name()))
 
+        # Add address details to the pretty print list
         pretty_print_data_list.append("Address:\n{},{},\n{},{}-{}".format(
             self.get_address_line_1(),
             self.get_address_line_2(),
@@ -220,27 +228,37 @@ class Patient:
             self.get_address_state(),
             self.get_address_zip()))
 
+        # Add contact details to the pretty print list
         pretty_print_data_list.append(
             "Contact Details:\nPhone {}\nEmail {}".format(
                 self.get_phone(),
                 self.get_email()))
 
-        return "\n".join(pretty_print_data_list)
+        # Join the list with new line character
+        pretty_print_str = "\n".join(pretty_print_data_list)
+
+        return pretty_print_str  # Return the pretty print string
 
     def __eq__(self, other):
-        return self.__patient_id == other.get_patient_id() and \
-               self.__first_name == other.get_first_name() and \
-               self.__last_name == other.get_last_name() and \
-               self.__dob == other.get_dob() and \
-               self.__gender == other.get_gender() and \
-               self.__address_line_1 == other.get_address_line_1() and \
-               self.__address_line_2 == other.get_address_line_2() and \
-               self.__city == other.get_address_city() and \
-               self.__state == other.get_address_state() and \
-               self.__zip == other.get_address_zip() and \
-               self.__phone == other.get_phone() and \
-               self.__email == other.get_email() and \
-               self.__questionnaire == other.get__questionnaire()
+        """Equality magic method helps to identify if two instance of Patient
+        object are equal in value. It can be used to identify the difference
+        between before and after patient object update changes, if there are
+        no changes value wise , we can skip to the CSV there by avoiding
+        one extra save operation."""
+
+        return (self.__patient_id == other.get_patient_id() and
+                self.__first_name == other.get_first_name() and
+                self.__last_name == other.get_last_name() and
+                self.__dob == other.get_dob() and
+                self.__gender == other.get_gender() and
+                self.__address_line_1 == other.get_address_line_1() and
+                self.__address_line_2 == other.get_address_line_2() and
+                self.__city == other.get_address_city() and
+                self.__state == other.get_address_state() and
+                self.__zip == other.get_address_zip() and
+                self.__phone == other.get_phone() and
+                self.__email == other.get_email() and
+                self.__questionnaire == other.get__questionnaire())
 
 
 # Unit Tests
@@ -252,7 +270,7 @@ if __name__ == "__main__":
                                "1 Home Drive", "Apt 2", "Boston", "MA", "02115",
                                "100-1000-2200", "harry@bu.edu", "[1,0,0,1]"]
 
-    # 1. Test patient object created fromt the list is correct or not.
+    # 1. Test patient object created from the list is correct or not.
     patient = Patient(patient_content_as_list)
     assert patient.get_patient_id() == "99" and \
            patient.get_first_name() == "Harry" and \

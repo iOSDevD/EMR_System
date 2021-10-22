@@ -45,17 +45,17 @@ class PrintFlowHandler:
         csv_data = FileHandlerUtility().read_all_records()
 
         # Print the details as table.
-        TableView.Table.printTable(csv_data[0], csv_data[1])
+        TableView.Table().print_table(csv_data[0], csv_data[1])
 
         # Flag for continue input. Set to false in case user taps on enter,
         # in which case it would exist the current module.
         prompt_for_detail_format = True
-        while prompt_for_detail_format:
+        while prompt_for_detail_format:  # Keep prompting if valid patient id
             patient_id_str = input(PrintFlowHandler.PRINT_INPUT_MESSAGE)
-            if len(patient_id_str.strip()) == 0:
+            if len(patient_id_str.strip()) == 0:  # Empty input entered.
                 prompt_for_detail_format = False  # Exit the current flow
                 continue
-            else:
+            else:  # Non empty input entered, use patient id to print record.
                 # Print patient record.
                 self.print_a_patient_record(patient_id_str)
 

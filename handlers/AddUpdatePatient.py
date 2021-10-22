@@ -4,6 +4,11 @@ Class: CS 521 - Fall 1
 Date: 10/16/2021
 Homework Problem # Project
 Description of Problem (1-2 sentence summary in your own words):
+
+AddUpdatePatient helps to add a new patient to the system or update
+the demographic details of the patient. Common functionality like
+update address and contact details are re-used between new patient flow
+and update patient flow.
 """
 
 from model.Patient import Patient
@@ -98,25 +103,35 @@ class AddUpdateFlowHandler:
 
         while True:  # Keep prompting user to enter patient details.
             if name_dob_validation is False and self.__is_in_new_patient_mode():
+                # First perform basic details validation like name which exists
+                # only for new patient.
                 name_dob_validation = self.__handle_basic_entries()
             elif address_validation is False:
+                # Second perform validation for address details.
                 address_validation = self.__handle_address_entries()
             elif contact_validation is False:
+                # At last perform validation for contact details.
                 contact_validation = self.__handle_contact_entries()
 
-            if (name_dob_validation or self.__is_in_new_patient_mode() is False) \
-                    and address_validation and contact_validation:
-                # Validation passed so save the data.
-                csv = FileHandlerUtility()
+            if (name_dob_validation or
+                self.__is_in_new_patient_mode() is False) and \
+                    address_validation and contact_validation:
+                # All Validation passed so save the data.
+                file_handler = FileHandlerUtility()  # CSV, File handler object
 
                 if self.__is_in_new_patient_mode() is False:
-                    return self.__patient
+                    return self.__patient  # Update returns modified patient
                 else:
+                    # New Patient writes to the CSV.
+                    # New patient id is the max id + 1. This way a unique
+                    # patient id is created with simple logic.
                     new_patient_id = self.validator.generate_new_patient_id()
                     self.__patient.set_patient_id(new_patient_id)
+
+                    # Convert Patient object to list before saving to csv.
                     patient_details_list = \
                         self.__patient.get_list_template_to_save()
-                    csv.write_new_record(patient_details_list)
+                    file_handler.write_new_record(patient_details_list)
                 break
 
     def __is_in_new_patient_mode(self):
@@ -186,7 +201,7 @@ class AddUpdateFlowHandler:
                         self.__patient.set_last_name(last_name_str)
                         self.__patient.set_dob(dob_str)
                         return True  # True helps to end basic info entry flow
-                else:
+                else:  # Gender Validation failed
                     print(AddUpdateFlowHandler.ERROR_MESSAGE_GENDER)
 
         return False
@@ -213,10 +228,14 @@ class AddUpdateFlowHandler:
                 # User entered less or more entries separated by delimiter.
                 # Show the error message.
                 print(AddUpdateFlowHandler.ERROR_INVALID_DELIMITER_ENTRIES)
-            else:
+            else:  # List size matches the expected size
                 address1, address2, city, state, address_zip = \
-                    address_input_list
+                    address_input_list  # assign using multiple assignment
+
+                # Validate state input, must be 2 characters and match
+                # the available list of states.
                 state_validation = self.validator.has_valid_state(state)
+
                 if self.validator.is_zip_code_valid(address_zip) is False:
                     # User entered invalid zip code, show message.
                     print(self.ERROR_ZIP_CODE)
@@ -255,6 +274,8 @@ class AddUpdateFlowHandler:
         else:  # Found input text valid, proceed ahead.
             contact_input_list = self.__get_list_from_input(contact_details)
             if len(contact_input_list) != AddUpdateFlowHandler.CONTACT_ENTRIES:
+                # User entered less or more entries separated by delimiter.
+                # Show the error message.
                 print(AddUpdateFlowHandler.ERROR_INVALID_DELIMITER_ENTRIES)
             else:
                 # All validation passed update the patient attribute.
