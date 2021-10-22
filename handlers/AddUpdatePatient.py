@@ -64,6 +64,11 @@ class AddUpdateFlowHandler:
                                       "entries separated by '{}'". \
         format(AppConstants.INPUT_DELIMITER)
 
+    # Message to be displayed when a new patient is registered.
+    NEW_PATIENT_REGISTRATION_SUCCESS = "New Patient {},{} has been " \
+                                       "added registered successfully " \
+                                       "with the system.\n"
+
     # Count pertaining First name, last name , date of birth and Gender as the
     # basic demographic entries expected from input function.
     BASIC_DEMOGRAPHIC_ENTRIES = 4
@@ -131,6 +136,9 @@ class AddUpdateFlowHandler:
                     patient_details_list = \
                         self.__patient.get_list_template_to_save()
                     file_handler.write_new_record(patient_details_list)
+                    print(AddUpdateFlowHandler.NEW_PATIENT_REGISTRATION_SUCCESS
+                          .format(self.__patient.get_first_name(),
+                                  self.__patient.get_last_name()))
                 break
 
     def __is_in_new_patient_mode(self):
