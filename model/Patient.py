@@ -20,6 +20,16 @@ class Patient:
     default list"""
 
     def __init__(self, details_list=AppConstants().get_empty_data_template()):
+        """Patient object Initializer which takes in list representation
+         of patient data in CSV. If there are mismatch between the
+         column count in the list, it will default to empty elements as the
+         provided values ["First Value","Second Value"] could be data
+         pertaining to any column of CSV. It helps to avoid ValueError while
+         unpacking the values."""
+
+        if len(details_list) != AppConstants.MAX_COLUMN_COUNT:
+            details_list = AppConstants().get_empty_data_template()
+
         (self.__patient_id, self.__first_name, self.__last_name, self.__dob,
          self.__gender, self.__address_line_1, self.__address_line_2,
          self.__city, self.__state, self.__zip,
@@ -296,5 +306,14 @@ if __name__ == "__main__":
     new_patient.set_address_line_1("Test Address change")
     assert new_patient != patient, (
         "After update patient object should not, values are different.")
+
+    # 4. Test patient object when LHS and RHS count of values don't match
+    patient_mismatch_content_list = ["1",
+                                     "John"]  # Only 2, required 13 by class
+    empty_patient = Patient()
+    assert Patient(patient_mismatch_content_list) == empty_patient, (
+        "Patient object creation should not fail, it "
+        "should default to empty template list and sho should match with "
+        "patient that has no detail")
 
     print("Success! Completed Executing test case in Patient")
