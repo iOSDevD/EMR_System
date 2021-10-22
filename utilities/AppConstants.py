@@ -51,7 +51,7 @@ class AppConstants:
     OPTIONS = {MAIN_SCREEN_ADD_NEW_PATIENT_KEY: "Add a new Patient",
                MAIN_SCREEN_SEARCH_PATIENT_KEY: "Search Patient",
                MAIN_SCREEN_PRINT_KEY: "Print all Patient Records",
-               MAIN_SCREEN_STATISTICS_KEY: "Stats of Patient Records",
+               MAIN_SCREEN_STATISTICS_KEY: "Statistics of Patient Records",
                MAIN_SCREEN_SIGN_OFF_KEY: "Sign off"}
 
     PATIENT_LOOK_UP_UPDATE_QUESTIONNAIRE_KEY, \
@@ -66,11 +66,6 @@ class AppConstants:
 
     FLOW_INITIATOR_OPTIONS = """What would you like to do?\n{}"""
 
-    OPTIONS_LIST = ["{}.{}".format(k, v) for k, v in OPTIONS.items()]
-
-    OPTIONS_LOOKUP_LIST = ["{}.{}".format(k, v) for k, v in
-                           LOOKUP_OPTIONS.items()]
-
     GENDER_VALUE_MALE, GENDER_VALUE_FEMALE, GENDER_VALUE_OTHER = \
         "Male", "Female", "Other"
     GENDER_DICTIONARY = {"F": GENDER_VALUE_FEMALE, "M": GENDER_VALUE_MALE,
@@ -83,7 +78,11 @@ class AppConstants:
         message, which would list the operations that can be performed with this
         system.
         """
-        return """\n""".join(AppConstants.OPTIONS_LIST)
+        sorted_options_str_list = self.get_sorted_formatted_list(
+            AppConstants.OPTIONS)
+
+        # Join the list to create a string separated by new line.
+        return """\n""".join(sorted_options_str_list)
 
     def get_empty_data_template(self):
         """ Generates the empty list of entries matching the MAX_COLUMN_COUNT.
@@ -92,7 +91,30 @@ class AppConstants:
 
     def get_patient_look_up_prompt(self):
         """Message to be displayed when patient lookup operation starts"""
-        return """\n""".join(AppConstants.OPTIONS_LOOKUP_LIST)
+        sorted_options_str_list = self.get_sorted_formatted_list(
+            AppConstants.LOOKUP_OPTIONS)
+
+        return """\n""".join(sorted_options_str_list)
+
+    def get_sorted_formatted_list(self, option_description_dict):
+        """Returns the sorted list of string representing option and its
+        description from the input dictionary."""
+
+        # Convert dictionary to list to tuple with option(key) and
+        # description (value)
+        main_screen_tuple_list = [(k, v) for (k, v) in
+                                  option_description_dict.items()]
+
+        # Sort the tuple with tuple at index 0, which is the option key like
+        # a,b,c..etc
+        main_screen_sorted_tuple = sorted(main_screen_tuple_list,
+                                          key=lambda x: x[0])
+
+        # Transform tuple list to string list with format as key.value
+        # i.e a. Add a new Patient
+        sorted_options_str_list = ["{}.{}".format(x[0], x[1]) for x in
+                                   main_screen_sorted_tuple]
+        return sorted_options_str_list  # Sorted list of string
 
 
 # Unit Tests
@@ -101,7 +123,8 @@ if __name__ == "__main__":
 
     # 1. Test main screen message
     main_screen_message = "a.Add a new Patient\nb.Search Patient\n" \
-                          "c.Print all Patient Records\nd.Sign off"
+                          "c.Print all Patient Records\nd.Statistics of " \
+                          "Patient Records\ne.Sign off"
 
     assert AppConstants().get_main_screen_prompt() == \
            main_screen_message, "Option message for prompt does not" \
@@ -125,5 +148,13 @@ if __name__ == "__main__":
         "Patient look up prompt does "
         "not match with expected main "
         "screen message '{}'".format(patient_look_up_message))
+
+    # 4. Test sorting of string list created from dictionary
+    input_dictionary = {"v": "Test 2", "a": "Test 1"}
+    expected_output_list = ["a.Test 1", "v.Test 2"]
+    assert AppConstants().get_sorted_formatted_list(
+        input_dictionary) == expected_output_list, (
+        "List of string representing option and description should "
+        "match with expected output")
 
     print("Success! Completed Executing test case in AppConstants")
