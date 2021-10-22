@@ -23,7 +23,6 @@ from handlers.LookUpPatient import LookUpFlowHandler
 from handlers.PrintPatientRecord import PrintFlowHandler
 
 # Start of the main program
-
 print(LoginConstants.WELCOME_MESSAGE)
 
 while True:  # Keep prompting user till valid user name and password is entered
@@ -64,7 +63,7 @@ while True:
             PrintStatistics.StatisticsFlowHandler().start_print_statistics()
         elif selected_main_option_str == AppConstants.MAIN_SCREEN_SIGN_OFF_KEY:
             # user selects to sign off from the system
-            print("\n\nSigning Off, from the System!....................")
+            print(LoginConstants.SIGN_OFF_MESSAGE)
             sys.exit()
     else:  # Invalid option entry, re-prompt user for valid entry.
-        print("Please try again, invalid input entered")
+        print(LoginConstants.INVALID_INPUT_TRY_AGAIN)

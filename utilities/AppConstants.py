@@ -39,6 +39,12 @@ class LoginConstants:
                                           "username and password separated " \
                                           "by space."
 
+    # Sign Off Message
+    SIGN_OFF_MESSAGE = "\n\nSigning Off, from the System!...................."
+
+    # Error message to be shown in case of invalid input is entered.
+    INVALID_INPUT_TRY_AGAIN = "Please try again, invalid input entered"
+
 
 class AppConstants:
     """Holds the constants for the App. which shows different modules like
