@@ -45,15 +45,18 @@ class PatientValidator:
     def __get_records_matching(self, firstname, lastname, dob, gender):
         """Returns a list of patients matching first name, last name , date of
         birth and gender. If any of these input values are empty it returns
-        default None."""
+        default None. Search is case insensitive."""
         if len(firstname.strip()) != 0 and len(lastname.strip()) != 0 and len(
                 dob.strip()) != 0:
             patient_data = FileHandlerUtility().read_all_records_row_data()
             patient_filter = filter(lambda patient:
-                                    patient.get_first_name() == firstname and
-                                    patient.get_last_name() == lastname and
-                                    patient.get_dob() == dob and
-                                    patient.get_gender() == gender,
+                                    (patient.get_first_name().upper() ==
+                                     firstname.upper()) and
+                                    (patient.get_last_name().upper() ==
+                                     lastname.upper()) and
+                                    (patient.get_dob() == dob) and
+                                    (patient.get_gender().upper() ==
+                                     gender.upper()),
                                     patient_data)
             patient_list = list(patient_filter)
             return patient_list
@@ -169,6 +172,29 @@ class PatientValidator:
         else:
             return "1"  # There are no records in CSV so new patient id is 1
 
+    def __strip_white_spaces(self, input_list):
+        """Process a list of strings which could have white spaces at the
+        leading  or trailing ends, it removes the white spaces at the ends
+        and returns list of stripped string values"""
+
+        # Map the values in the list to values which have whitespaces stripped
+        # off.
+        stripped_map = map(lambda input_str: input_str.strip(), input_list)
+
+        return list(stripped_map)  # Get list from mapped object
+
+    def get_list_from_input(self, input_str):
+        """Splits the input string with the help of provided delimiter (ex: $)
+        and converts it to a list. """
+
+        # Convert string to list by splitting with delimiter `$`
+        input_list = input_str.split(AppConstants.INPUT_DELIMITER)
+
+        # Remove whitespace at leading or trailing end.
+        whitespace_stripped_list = self.__strip_white_spaces(input_list)
+
+        return whitespace_stripped_list  # Cleaned list of string values
+
 
 # Unit Tests
 if __name__ == "__main__":
@@ -243,5 +269,14 @@ if __name__ == "__main__":
     assert int(validator.generate_new_patient_id()) > 0, (
         "New patient id should be generated when requested and "
         "should be greater than 0")
+
+    # 8. Test values in list are trimmed at leading and trailing ends.
+    input_str_with_spaces = "  John Smith  $Ted   $  Kyle$ Paul"
+    expected_stripped_list = ["John Smith", "Ted", "Kyle", "Paul"]
+
+    assert validator.get_list_from_input(
+        input_str_with_spaces) == expected_stripped_list, (
+        "List generated would have string values without "
+        "leading/trailing space and should match with expected list.")
 
     print("Success! Completed Executing test case in PatientValidator")

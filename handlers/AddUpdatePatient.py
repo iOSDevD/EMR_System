@@ -12,6 +12,7 @@ and update patient flow.
 """
 
 from model.Patient import Patient
+from utilities.AppConstants import AppConstants
 from utilities.CSVUtility import FileHandlerUtility
 from utilities.PatientValidator import PatientValidator
 
@@ -23,26 +24,24 @@ class AddUpdateFlowHandler:
     initialization.
     """
 
-    # Delimiter constant to accept entries from console separated by $
-    INPUT_DELIMITER = "$"
-
     # Prompt to be displayed to request basic details like, name , date of
     # birth and gender.
     NAME_GENDER_INPUT_MESSAGE = "Please enter FirstName, LastName,Date of " \
                                 "Birth and Gender of the patient you want " \
                                 "to add, separated by '{}'\nFor Gender " \
                                 "please enter M for Male, F for Female " \
-                                "and O for Other.".format(INPUT_DELIMITER)
+                                "and O for Other."\
+        .format(AppConstants.INPUT_DELIMITER)
 
     # Prompt to be displayed to request address details like address line 1,
     # state, zip and etc.
     ADDRESS_INPUT_MESSAGE = "Please enter Address Line 1, Line 2, City, " \
                             "State and Zip all separated " \
-                            "by '{}'".format(INPUT_DELIMITER)
+                            "by '{}'".format(AppConstants.INPUT_DELIMITER)
 
     # Prompt to be displayed to request contact details like phone and email.
     CONTACT_INPUT_MESSAGE = "Please enter Phone and email-id separated " \
-                            "by '{}'".format(INPUT_DELIMITER)
+                            "by '{}'".format(AppConstants.INPUT_DELIMITER)
 
     # Error message to be displayed when invalid gender value is entered out
     # of permissible values.
@@ -63,7 +62,7 @@ class AddUpdateFlowHandler:
     # comma in the input, which could affect the CSV format.
     ERROR_INVALID_DELIMITER_ENTRIES = "Error! Please enter valid " \
                                       "entries separated by '{}'". \
-        format(INPUT_DELIMITER)
+        format(AppConstants.INPUT_DELIMITER)
 
     # Count pertaining First name, last name , date of birth and Gender as the
     # basic demographic entries expected from input function.
@@ -144,11 +143,6 @@ class AddUpdateFlowHandler:
         else:
             return False  # Update patient demographics mode.
 
-    def __get_list_from_input(self, input_str):
-        """Splits the input string with the help of provided delimiter (ex: $)
-        and converts it to a list. """
-        return input_str.split(AddUpdateFlowHandler.INPUT_DELIMITER)
-
     def __handle_basic_entries(self):
         """Handle the flow of basic patient entries like name, dob, gender and
         also perform the required validation with it. This is usually done
@@ -166,7 +160,7 @@ class AddUpdateFlowHandler:
             # Error! Print invalid character message.s
             print(text_has_valid_chars[1])
         else:  # Found input text valid, proceed ahead.
-            name_dob_input_list = self.__get_list_from_input(name_dob)
+            name_dob_input_list = self.validator.get_list_from_input(name_dob)
 
             if len(name_dob_input_list) != \
                     AddUpdateFlowHandler.BASIC_DEMOGRAPHIC_ENTRIES:
@@ -187,12 +181,13 @@ class AddUpdateFlowHandler:
                 elif gender_str is not None:
                     # All validation passed, finally check for duplicate.
                     if self.validator.check_if_patient_exits(first_name_str,
-                                                               last_name_str,
-                                                               dob_str,
-                                                               gender_str):
+                                                             last_name_str,
+                                                             dob_str,
+                                                             gender_str):
                         # Duplicate patient found, show error message.
                         print(AddUpdateFlowHandler.ERROR_DUPLICATE_PATIENT.
-                              format(last_name_str.title(), first_name_str))
+                              format(last_name_str.title(),
+                                     first_name_str.title()))
                     else:
                         # No duplicates and all validation passed update
                         # the patient attribute.
@@ -222,7 +217,7 @@ class AddUpdateFlowHandler:
             # Error! Print invalid character message.
             print(text_has_valid_chars[1])
         else:  # Found input text valid, proceed ahead.
-            address_input_list = self.__get_list_from_input(address)
+            address_input_list = self.validator.get_list_from_input(address)
 
             if len(address_input_list) != AddUpdateFlowHandler.ADDRESS_ENTRIES:
                 # User entered less or more entries separated by delimiter.
@@ -272,7 +267,8 @@ class AddUpdateFlowHandler:
             # Error! Print invalid character message.
             print(text_has_valid_chars[1])
         else:  # Found input text valid, proceed ahead.
-            contact_input_list = self.__get_list_from_input(contact_details)
+            contact_input_list = self.validator.\
+                get_list_from_input(contact_details)
             if len(contact_input_list) != AddUpdateFlowHandler.CONTACT_ENTRIES:
                 # User entered less or more entries separated by delimiter.
                 # Show the error message.

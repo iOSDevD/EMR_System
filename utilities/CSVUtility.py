@@ -23,6 +23,7 @@ INPUT_FILE_NAME = "PatientRecords.csv"
 # which can be used for testing.
 TEST_FILE_NAME = "PatientRecordsTest.csv"
 
+
 class FileHandlerUtility:
     """ File Handler Utility which helps to perform CRUD operations like
     add new patient, read patient records, update and delete patient record
@@ -225,7 +226,7 @@ if __name__ == "__main__":
         "There should be more than one patient rows with patient object")
 
     # 3. Test case to Add new Patient
-    fake_patient_id = "12346789TestPatientid"
+    fake_patient_id = "12346789"
     dummyPatient = Patient()
     dummyPatient.set_patient_id(fake_patient_id)
     utility.write_new_record(dummyPatient.get_list_template_to_save())

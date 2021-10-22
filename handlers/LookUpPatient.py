@@ -86,9 +86,14 @@ class LookUpFlowHandler:
             # Display input message
             name_dob = input(self.__UPDATE_DEMOGRAPHIC_MESSAGE)
 
-            # Convert input string to list of string entries split by
-            # default whitespace.
-            name_dob_input_list = name_dob.split(AppConstants.INPUT_DELIMITER)
+            # Validator for input validation of things like dob, zip code ,etc.
+            patient_validator = PatientValidator()
+
+            # Convert input string to list of string and remove whitespace
+            # for each element in the list.
+            name_dob_input_list = patient_validator.get_list_from_input(
+                name_dob)
+
             if len(name_dob_input_list) != \
                     LookUpFlowHandler.BASIC_DEMOGRAPHIC_ENTRIES:
                 # User entered less or more entries separated by delimiter.
@@ -97,8 +102,6 @@ class LookUpFlowHandler:
             else:
                 # Multiple assignment from list to variables.
                 firstname, lastname, dob, gender = name_dob_input_list
-                # Find patient matching name, dob and gender using validator.
-                patient_validator = PatientValidator()
 
                 # Validate gender abbreviation string and in return get
                 # formatted values, ex: "F" converts to Female.
@@ -114,7 +117,7 @@ class LookUpFlowHandler:
                                                                    dob, gender)
                     if patient is None:  # Patient not found.
                         print(self.__ERROR_MESSAGE_CANNOT_FIND_PATIENT.format(
-                            firstname, lastname, dob, gender))
+                            firstname.title(), lastname.title(), dob, gender))
                     else:  # Found patient.
                         # Store searched patient to be used further,
                         # ex: Update patient questionnaire.

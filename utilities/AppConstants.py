@@ -23,7 +23,7 @@ class LoginConstants:
     # Prompt the user to enter user name and password separated by space.
     EMR_LOGIN_CREDENTIAL_PROMPT_MESSAGE = "Please enter the user name and " \
                                           "password separated by space, to " \
-                                          "login into the EMR system"
+                                          "login into the EMR system:\n"
 
     # Validation was success, use this text to show login success message.
     EMR_LOGIN_SUCCESS_MESSAGE = "Success! Loading the System now.........\n"
@@ -62,6 +62,11 @@ class AppConstants:
                MAIN_SCREEN_STATISTICS_KEY: "Statistics of Patient Records",
                MAIN_SCREEN_SIGN_OFF_KEY: "Sign off"}
 
+    # Patient look up option additional message to help identify option
+    # or exit.
+    MAIN_SCREEN_ADDITIONAL_MESSAGE = "\nPlease select one of the option " \
+                                     "(ex: a)\n"
+
     # Patient Look up option, sub options. These options are available
     # after the patient look up finds a patient.
     LOOK_UP_UPDATE_QUESTIONNAIRE_KEY, LOOK_UP_UPDATE_PATIENT_KEY, \
@@ -75,6 +80,11 @@ class AppConstants:
                                     "details (Address and Contact)",
         LOOK_UP_DELETE_PATIENT_KEY: "Delete the patient"}
 
+    # Patient look up option additional message to help identify option
+    # or exit.
+    LOOKUP_ADDITIONAL_MESSAGE = "\nPlease select one of the option (ex: a)" \
+                                " or simply press enter again to exit.\n"
+
     # Gender values used for presentation and saving to file.
     GENDER_VALUE_MALE, GENDER_VALUE_FEMALE, GENDER_VALUE_OTHER = \
         "Male", "Female", "Other"
@@ -84,7 +94,8 @@ class AppConstants:
     GENDER_DICTIONARY = {"F": GENDER_VALUE_FEMALE, "M": GENDER_VALUE_MALE,
                          "O": GENDER_VALUE_OTHER}
 
-    # Input Delimiter used during input to capture multiple values.
+    # Delimiter constant to accept entries from console separated by $.
+    # Helps to capture multiple values from console.
     INPUT_DELIMITER = "$"
 
     def get_main_screen_prompt(self):
@@ -96,7 +107,9 @@ class AppConstants:
             AppConstants.OPTIONS)
 
         # Join the list to create a string separated by new line.
-        return """\n""".join(sorted_options_str_list)
+        prompt_message_str = """\n""".join(sorted_options_str_list) + \
+                             AppConstants.MAIN_SCREEN_ADDITIONAL_MESSAGE
+        return prompt_message_str
 
     def get_empty_data_template(self):
         """ Generates the empty list of entries matching the MAX_COLUMN_COUNT.
@@ -108,7 +121,11 @@ class AppConstants:
         sorted_options_str_list = self.get_sorted_formatted_list(
             AppConstants.LOOKUP_OPTIONS)
 
-        return """\n""".join(sorted_options_str_list)
+        # Message combination of options details and a additional message
+        # to enter option or exit.
+        prompt_message_str = """\n""".join(sorted_options_str_list) + \
+                             AppConstants.LOOKUP_ADDITIONAL_MESSAGE
+        return prompt_message_str
 
     def get_sorted_formatted_list(self, option_description_dict):
         """Returns the sorted list of string representing option and its
@@ -155,7 +172,8 @@ if __name__ == "__main__":
     # 3. Test Patient Look up Prompt Message
     patient_look_up_message = "a.Add/Update Intake form\nb.Update " \
                               "patient details (Address and " \
-                              "Contact)\nc.Delete the patient"
+                              "Contact)\nc.Delete the patient" + \
+                              AppConstants.LOOKUP_ADDITIONAL_MESSAGE
 
     assert AppConstants().get_patient_look_up_prompt() == \
            patient_look_up_message, (
