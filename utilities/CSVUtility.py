@@ -16,6 +16,12 @@ import time
 
 from model.Patient import Patient
 
+# CSV  file name holding the patient records.
+INPUT_FILE_NAME = "PatientRecords.csv"
+
+# CSV  file name holding the patient records,
+# which can be used for testing.
+TEST_FILE_NAME = "PatientRecordsTest.csv"
 
 class FileHandlerUtility:
     """ File Handler Utility which helps to perform CRUD operations like
@@ -23,19 +29,22 @@ class FileHandlerUtility:
     on a input file.
     """
 
-    # CSV  file name holding the patient records.
-    __INPUT_FILE_NAME = "PatientRecords.csv"  # Private static attribute
-
     # Folder in which Input file name is present
     __INPUT_FOLDER_NAME = "InputFiles"  # Private static attribute
 
     # Encoding to be used while encoding or decoding the input file.
     __FILE_ENCODING = 'utf-8-sig'  # Private static attribute
 
+    def __init__(self, file_name=INPUT_FILE_NAME):
+        """Initialize the utility handler with a default file name. We can still
+        initialize it with a different file name, usually we use it during
+        Test."""
+        self.__file_name = file_name
+
     def __get_input_file_path(self):
         """Get the path of the file with folder that it resides in, using
         a platform independent approach."""
-        return os.path.join(self.__INPUT_FOLDER_NAME, self.__INPUT_FILE_NAME)
+        return os.path.join(self.__INPUT_FOLDER_NAME, self.__file_name)
 
     def read_all_records(self, rows_as_patient=False):
         """ Read records from a file and returns a tuple of header and rows.
@@ -195,7 +204,7 @@ if __name__ == "__main__":
     os.chdir(parent)
 
     # FileHandlerUtility to test
-    utility = FileHandlerUtility()
+    utility = FileHandlerUtility(TEST_FILE_NAME)
 
     # 1. Test Case to check fetch of rows as string.
     all_rows_with_header = utility.read_all_records()
