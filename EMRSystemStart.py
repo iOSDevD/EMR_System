@@ -13,7 +13,7 @@ to be performed like patient look up, update demographics and questionnaire.
 
 import sys
 
-from InputFiles.LoginUserValidation import perform_credential_validation
+from utilities.LoginUserValidation import perform_credential_validation
 from handlers import PrintStatistics
 from utilities.AppConstants import AppConstants, LoginConstants
 from handlers.AddUpdatePatient import AddUpdateFlowHandler
