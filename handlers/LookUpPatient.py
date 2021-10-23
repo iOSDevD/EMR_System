@@ -146,8 +146,10 @@ class LookUpFlowHandler:
                     self.__update_patient_details(searched_patient)
                 elif lookup_options_str == \
                         AppConstants.LOOK_UP_DELETE_PATIENT_KEY:
-                    # Delete a patient flow.
+                    # Delete a patient flow. After delete update demographic
+                    # and intake form is of no use so break the flow.
                     self.__delete_patient(searched_patient)
+                    break  # Break the flow once the patient is deleted
             else:  # Any other input text, simply exit the LookUpPatient flow.
                 print("*********Closing Patient Look up*************")
                 break

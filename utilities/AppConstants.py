@@ -161,7 +161,8 @@ if __name__ == "__main__":
     # 1. Test main screen message
     main_screen_message = "a.Add a new Patient\nb.Search Patient\n" \
                           "c.Print all Patient Records\nd.Statistics of " \
-                          "Patient Records\ne.Sign off"
+                          "Patient Records\ne.Sign off" + \
+                          AppConstants.MAIN_SCREEN_ADDITIONAL_MESSAGE
 
     assert AppConstants().get_main_screen_prompt() == \
            main_screen_message, "Option message for prompt does not" \

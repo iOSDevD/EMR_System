@@ -81,11 +81,19 @@ class AddUpdateFlowHandler:
     # expected from input function.
     CONTACT_ENTRIES = 2
 
-    def __init__(self, patient=Patient()):
+    def __init__(self, patient=None):
         """ Initialize with non empty patient object in case we want to use
         the current class in update patient details mode, else it defaults
-        to new patient creation."""
-        self.__patient = patient  # private patient attribute
+        to new patient creation as the default patient value is immutable
+        value None"""
+        if patient is None:
+            # Set a new object if none to private patient attribute
+            # ex: New Patient creation flow.
+            self.__patient = Patient()
+        else:
+            # Set the patient object if not None to private
+            # patient attribute. ex: Update patient
+            self.__patient = patient
         self.validator = PatientValidator()  # public validator attribute
 
     def add_update_patient_flow(self):
